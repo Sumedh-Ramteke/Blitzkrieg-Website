@@ -1,0 +1,78 @@
+// This is your Prisma schema file.
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── User (admin accounts only, no public registration) ────────────
+model User {
+  id            Int      @id @default(autoincrement())
+  username      String   @unique @db.VarChar(50)
+  password_hash String
+  role          Role     @default(ADMIN)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  // Relations
+  events        Event[]  @relation("EventCreatedBy")
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+}
+
+// ─── CommitteeMember ────────────────────────────────────────────────
+model CommitteeMember {
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(100)
+  role         String   @db.VarChar(100)
+  year_label   String   @db.VarChar(20)   // e.g. "2025-26"
+  branch       String?  @db.VarChar(100)  // e.g. "CSE, 3rd Year"
+  image_url    String?  @db.VarChar(500)
+  sort_order   Int      @default(100)     // lower = appears first
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  @@index([year_label])
+  @@index([sort_order])
+  @@map("committee_members")
+}
+
+// ─── Event (public tournaments / club events) ───────────────────────
+model Event {
+  id                 Int      @id @default(autoincrement())
+  title              String   @db.VarChar(200)
+  date               DateTime
+  description        String   @db.Text
+  image_url          String?  @db.VarChar(500)
+  is_published       Boolean  @default(true)
+
+  // ── Detail fields (optional, shown on the event detail page) ──
+  participants_count Int?                          // number of participants
+  prize_fund         Int?                          // total prize pool in ₹
+  chess_results_url  String?  @db.VarChar(500)    // link to chess-results.com
+  brochure_url       String?  @db.VarChar(500)    // brochure PDF link / upload path
+  winners            Json?                         // [{ position, name, rating? }]
+  gallery            Json?                         // ["url1", "url2", ...]
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // Relations
+  created_by    Int?
+  creator       User?    @relation("EventCreatedBy", fields: [created_by], references: [id], onDelete: SetNull)
+
+  @@index([date(sort: Desc)])
+  @@index([is_published])
+  @@map("events")
+}
