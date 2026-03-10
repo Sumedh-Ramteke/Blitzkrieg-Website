@@ -11,9 +11,13 @@ import Contact from './pages/Contact'
 import AdminLogin      from './pages/admin/AdminLogin'
 import AdminDashboard  from './pages/admin/AdminDashboard'
 import AdminEvents     from './pages/admin/AdminEvents'
-import AdminCommittee  from './pages/admin/AdminCommittee'
-import AdminLayout     from './components/admin/AdminLayout'
-import ProtectedRoute  from './components/admin/ProtectedRoute'
+import AdminCommittee      from './pages/admin/AdminCommittee'
+import AdminChangePassword from './pages/admin/AdminChangePassword'
+import AdminMessages       from './pages/admin/AdminMessages'
+import ForgotPassword      from './pages/admin/ForgotPassword'
+import ResetPassword       from './pages/admin/ResetPassword'
+import AdminLayout         from './components/admin/AdminLayout'
+import ProtectedRoute      from './components/admin/ProtectedRoute'
 
 /* Public site wrapper — Header + Footer around an Outlet */
 function PublicLayout() {
@@ -24,7 +28,7 @@ function PublicLayout() {
         <Outlet />
       </main>
       <footer className="border-t border-slate-800 py-6 text-center text-slate-500 text-sm">
-        © {new Date().getFullYear()} Blitzkreig Chess Club VNIT. All rights reserved.
+        © {new Date().getFullYear()} Blitzkrieg Chess Club VNIT. All rights reserved.
       </footer>
     </div>
   )
@@ -47,6 +51,8 @@ function App() {
 
           {/* ── Admin: login (no auth required) ── */}
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+          <Route path="/admin/reset-password" element={<ResetPassword />} />
 
           {/* ── Admin: protected area with sidebar layout ── */}
           <Route path="/admin" element={
@@ -57,6 +63,8 @@ function App() {
             <Route index           element={<AdminDashboard />} />
             <Route path="events"   element={<AdminEvents />} />
             <Route path="committee" element={<AdminCommittee />} />
+            <Route path="messages" element={<AdminMessages />} />
+            <Route path="change-password" element={<AdminChangePassword />} />
           </Route>
         </Routes>
       </Router>

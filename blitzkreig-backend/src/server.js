@@ -14,6 +14,7 @@ const authRoutes      = require('./routes/auth')
 const eventRoutes     = require('./routes/events')
 const committeeRoutes = require('./routes/committee')
 const uploadRoutes    = require('./routes/upload')
+const contactRoutes   = require('./routes/contact')
 
 // ─── App Setup ────────────────────────────────────────────────────────
 const app  = express()
@@ -49,12 +50,13 @@ app.use('/api/auth',      authRoutes)
 app.use('/api/events',    eventRoutes)
 app.use('/api/committee', committeeRoutes)
 app.use('/api/upload',    uploadRoutes)
+app.use('/api/contact',   contactRoutes)
 
 // ─── Health Check ─────────────────────────────────────────────────────
 app.get('/api/health', (_req, res) => {
   res.json({
     status:  'ok',
-    service: 'Blitzkreig Chess Club API',
+    service: 'Blitzkrieg Chess Club API',
     version: '1.0.0',
     time:    new Date().toISOString(),
   })
@@ -78,7 +80,7 @@ app.use((err, _req, res, _next) => {
 
 // ─── Start ────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`\n🚀  Blitzkreig API listening on http://localhost:${PORT}`)
+  console.log(`\n🚀  Blitzkrieg API listening on http://localhost:${PORT}`)
   console.log(`📋  Health: http://localhost:${PORT}/api/health\n`)
 })
 

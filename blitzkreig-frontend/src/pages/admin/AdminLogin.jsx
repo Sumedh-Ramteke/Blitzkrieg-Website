@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 
 export default function AdminLogin() {
@@ -45,7 +45,7 @@ export default function AdminLogin() {
           <div className="text-center space-y-2">
             <div className="text-4xl">♔</div>
             <h1 className="text-2xl font-extrabold text-slate-100">Admin Login</h1>
-            <p className="text-slate-500 text-sm">Blitzkreig Chess Club VNIT</p>
+            <p className="text-slate-500 text-sm">Blitzkrieg Chess Club VNIT</p>
           </div>
 
           {/* Error */}
@@ -104,6 +104,11 @@ export default function AdminLogin() {
 
           <p className="text-center text-slate-600 text-xs">
             This area is restricted to authorised club administrators.
+          </p>
+          <p className="text-center">
+            <Link to="/admin/forgot-password" className="text-slate-500 hover:text-vnit-blue-glow text-sm transition-colors">
+              Forgot Password?
+            </Link>
           </p>
         </div>
 

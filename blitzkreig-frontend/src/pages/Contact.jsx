@@ -1,16 +1,27 @@
 import { useState } from 'react'
+import axios from 'axios'
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleChange = e =>
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
-    // TODO: wire up to backend contact endpoint
-    setSubmitted(true)
+    setError('')
+    setLoading(true)
+    try {
+      await axios.post('/api/contact', form)
+      setSubmitted(true)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to send message. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -33,6 +44,11 @@ export default function Contact() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
+            {error && (
+              <div className="rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 text-sm">
+                {error}
+              </div>
+            )}
             {[
               { label: 'Your Name',     name: 'name',    type: 'text',  placeholder: 'Arjun Kulkarni'       },
               { label: 'Email Address', name: 'email',   type: 'email', placeholder: 'you@students.vnit.ac.in' },
@@ -66,8 +82,8 @@ export default function Contact() {
                            focus:border-vnit-blue transition-colors resize-none"
               />
             </div>
-            <button type="submit" className="btn-primary w-full justify-center">
-              Send Message
+            <button type="submit" disabled={loading} className="btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+              {loading ? 'Sending…' : 'Send Message'}
             </button>
           </form>
         )}

@@ -29,7 +29,7 @@ async function main() {
   // ── Sample events ──────────────────────────────────────────────────
   const sampleEvents = [
     {
-      title:       'Blitzkreig Rapid Championship 2024',
+      title:       'Blitzkrieg Rapid Championship 2024',
       date:        new Date('2024-11-15'),
       description: 'Our flagship annual rapid tournament drawing 80+ participants. 9 Swiss rounds, 15+10 time control.',
       image_url:   'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=640&q=80',

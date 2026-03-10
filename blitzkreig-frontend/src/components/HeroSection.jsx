@@ -1,8 +1,23 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-/* ── 3-D Chess Board SVG Illustration ─────────────────────────────── */
+/* ── Chess Board SVG — Fried Liver Attack (after 6.Nxf7!?) ────────── */
 function ChessBoardIllustration() {
+  // Fried Liver Attack — one of the most famous positions in chess
+  // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6 4.Ng5 d5 5.exd5 Nxd5 6.Nxf7!?
+  // [piece, col (a=0…h=7), row (rank8=0…rank1=7)]
+  const pieces = [
+    ['♜',0,0], ['♝',2,0], ['♛',3,0], ['♚',4,0], ['♝',5,0], ['♜',7,0],
+    ['♟',0,1], ['♟',1,1], ['♟',2,1], ['♘',5,1], ['♟',6,1], ['♟',7,1],
+    ['♞',2,2],
+    ['♞',3,3], ['♟',4,3],
+    ['♗',2,4],
+    ['♙',0,6], ['♙',1,6], ['♙',2,6], ['♙',3,6], ['♙',5,6], ['♙',6,6], ['♙',7,6],
+    ['♖',0,7], ['♘',1,7], ['♗',2,7], ['♕',3,7], ['♔',4,7], ['♖',7,7],
+  ]
+
+  const isWhite = (p) => '♔♕♖♗♘♙'.includes(p)
+
   return (
     <div className="relative flex items-center justify-center w-full h-full select-none">
       {/* Backdrop glow rings */}
@@ -64,31 +79,28 @@ function ChessBoardIllustration() {
               })
             )}
 
-            {/* ── Chess Pieces (symbolic, Unicode-based text) ── */}
-            {/* White King */}
-            <text x="160" y="172" textAnchor="middle" fontSize="30" fill="#EAB308" opacity="0.9">♔</text>
-            {/* White Queen */}
-            <text x="120" y="212" textAnchor="middle" fontSize="26" fill="#f1f5f9" opacity="0.85">♕</text>
-            {/* Black King */}
-            <text x="160" y="132" textAnchor="middle" fontSize="30" fill="#60A5FA" opacity="0.9">♚</text>
-            {/* White Rook */}
-            <text x="200" y="252" textAnchor="middle" fontSize="24" fill="#f1f5f9" opacity="0.75">♖</text>
-            {/* Black Knight */}
-            <text x="80"  y="92"  textAnchor="middle" fontSize="24" fill="#60A5FA" opacity="0.8">♞</text>
-            {/* White Bishop */}
-            <text x="240" y="172" textAnchor="middle" fontSize="22" fill="#f1f5f9" opacity="0.7">♗</text>
-            {/* White Pawns */}
-            {[40, 80, 120, 200, 240].map((x, i) => (
-              <text key={i} x={x} y="292" textAnchor="middle" fontSize="18" fill="#94a3b8" opacity="0.55">♙</text>
-            ))}
-            {/* Black Pawns */}
-            {[80, 120, 160, 200, 240, 280].map((x, i) => (
-              <text key={i} x={x} y="52" textAnchor="middle" fontSize="18" fill="#60A5FA" opacity="0.5">♟</text>
-            ))}
+            {/* Highlight the Nxf7 sacrifice square */}
+            <rect x={5*40} y={1*40} width="40" height="40" fill="#EAB308" opacity="0.15" rx="2" />
 
-            {/* Glowing highlight on King squares */}
-            <circle cx="160" cy="160" r="22" fill="#EAB308" opacity="0.08" />
-            <circle cx="160" cy="120" r="18" fill="#1A56DB" opacity="0.12" />
+            {/* ── Pieces — centered in each cell ── */}
+            {pieces.map(([piece, col, row], i) => (
+              <text
+                key={i}
+                x={col * 40 + 20}
+                y={row * 40 + 20}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fontSize="28"
+                fill={
+                  piece === '♔' ? '#EAB308'
+                    : isWhite(piece) ? '#f1f5f9'
+                    : '#60A5FA'
+                }
+                opacity={piece === '♔' || piece === '♚' ? 0.95 : 0.8}
+              >
+                {piece}
+              </text>
+            ))}
           </svg>
         </div>
       </div>
@@ -140,7 +152,7 @@ export default function HeroSection() {
                             border border-vnit-blue/40 bg-vnit-blue/10 text-vnit-blue-glow
                             text-xs font-semibold tracking-widest uppercase">
               <span className="w-1.5 h-1.5 rounded-full bg-vnit-blue animate-pulse" />
-              Blitzkreig Chess Club · VNIT Nagpur
+              Blitzkrieg Chess Club · VNIT Nagpur
             </div>
 
             {/* Main headline */}

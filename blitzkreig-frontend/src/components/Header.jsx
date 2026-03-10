@@ -43,7 +43,7 @@ export default function Header() {
             </span>
             <span className="leading-tight">
               <span className="block text-base font-extrabold tracking-tight text-white group-hover:text-vnit-gold-light transition-colors">
-                Blitzkreig
+                Blitzkrieg
               </span>
               <span className="block text-[10px] font-semibold tracking-[0.2em] text-vnit-blue-glow uppercase">
                 Chess Club VNIT

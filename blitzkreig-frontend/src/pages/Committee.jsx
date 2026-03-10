@@ -139,7 +139,7 @@ export default function Committee() {
             Our <span className="text-gradient-blue-gold">Committee</span>
           </h1>
           <p className="text-slate-400 max-w-xl text-base">
-            The dedicated team steering Blitzkreig Chess Club through every season —
+            The dedicated team steering Blitzkrieg Chess Club through every season —
             organising tournaments, training sessions, and outreach initiatives.
           </p>
         </div>

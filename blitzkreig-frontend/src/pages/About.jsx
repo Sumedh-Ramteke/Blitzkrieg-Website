@@ -3,11 +3,11 @@ export default function About() {
     <div className="pt-32 pb-20">
       <div className="section-container max-w-3xl space-y-8">
         <h1 className="text-4xl font-extrabold">
-          About <span className="text-gradient-blue-gold">Blitzkreig</span>
+          About <span className="text-gradient-blue-gold">Blitzkrieg</span>
         </h1>
         <div className="prose prose-invert prose-slate max-w-none space-y-5 text-slate-400 leading-relaxed">
           <p>
-            Blitzkreig Chess Club is the official chess club of{' '}
+            Blitzkrieg Chess Club is the official chess club of{' '}
             <span className="text-slate-200 font-medium">
               Visvesvaraya National Institute of Technology (VNIT), Nagpur.
             </span>{' '}
@@ -21,7 +21,7 @@ export default function About() {
             technique.
           </p>
           <p>
-            Whether you are a seasoned rated player or have never touched a chess piece, Blitzkreig
+            Whether you are a seasoned rated player or have never touched a chess piece, Blitzkrieg
             welcomes you. The sixty-four squares await.
           </p>
         </div>
