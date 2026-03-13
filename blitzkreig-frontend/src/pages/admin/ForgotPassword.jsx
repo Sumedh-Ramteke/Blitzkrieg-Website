@@ -26,7 +26,7 @@ export default function ForgotPassword() {
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-96 h-96
-                        rounded-full bg-vnit-blue/10 blur-3xl" />
+                        rounded-full bg-vnit-gold/10 blur-3xl" />
       </div>
 
       <div className="relative w-full max-w-md">
@@ -44,7 +44,7 @@ export default function ForgotPassword() {
               <p className="text-green-400 text-sm font-medium">
                 If the account exists, a reset link has been sent to the club email.
               </p>
-              <Link to="/admin/login" className="text-vnit-blue-glow text-sm hover:underline">
+              <Link to="/admin/login" className="text-vnit-gold text-sm hover:underline">
                 ← Back to login
               </Link>
             </div>
@@ -67,7 +67,7 @@ export default function ForgotPassword() {
                     required
                     className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700
                                text-slate-200 placeholder:text-slate-600 focus:outline-none
-                               focus:border-vnit-blue transition-colors"
+                               focus:border-vnit-gold transition-colors"
                   />
                 </div>
                 <button

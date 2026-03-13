@@ -7,18 +7,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        // VNIT Blue — primary brand accent
+        // Dark surface — replaces former blue; keeps all vnit-blue class names working
         'vnit-blue': {
-          DEFAULT: '#1A56DB',
-          light:   '#3B82F6',
-          dark:    '#1E3A8A',
-          glow:    '#60A5FA',
+          DEFAULT: '#1C1A16',   // very dark warm charcoal (surface)
+          light:   '#2D2922',   // slightly lighter dark
+          dark:    '#0D0B08',   // near-black
+          glow:    '#C9A84C',   // gold — any "glow" text/accent is now gold
         },
-        // Gold accent matching club logo
+        // Antique gold — the ONLY accent colour, matching the club logo
         'vnit-gold': {
-          DEFAULT: '#EAB308', // yellow-500
-          light:   '#FDE047', // yellow-300
-          dark:    '#CA8A04', // yellow-600
+          DEFAULT: '#C9A84C',   // warm antique gold
+          light:   '#E8C96D',   // bright gold highlight
+          dark:    '#8B6A14',   // deep burnished gold
         },
       },
       fontFamily: {
@@ -27,13 +27,13 @@ export default {
         chess: ['"MedievalSharp"', 'serif'],
       },
       backgroundImage: {
-        'hero-gradient': 'radial-gradient(ellipse at 60% 40%, rgba(26,86,219,0.25) 0%, rgba(234,179,8,0.08) 50%, transparent 75%)',
-        'card-gradient': 'linear-gradient(135deg, rgba(30,58,138,0.15) 0%, rgba(15,23,42,0.8) 100%)',
+        'hero-gradient': 'radial-gradient(ellipse at 60% 40%, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.04) 50%, transparent 75%)',
+        'card-gradient': 'linear-gradient(135deg, rgba(28,26,22,0.4) 0%, rgba(13,11,8,0.95) 100%)',
       },
       boxShadow: {
-        'blue-glow':  '0 0 24px 4px rgba(26,86,219,0.45)',
-        'gold-glow':  '0 0 20px 3px rgba(234,179,8,0.35)',
-        'card-hover': '0 8px 32px rgba(26,86,219,0.3)',
+        'blue-glow':  '0 0 24px 4px rgba(201,168,76,0.25)',
+        'gold-glow':  '0 0 20px 3px rgba(201,168,76,0.45)',
+        'card-hover': '0 8px 32px rgba(201,168,76,0.2)',
       },
       animation: {
         'float':     'float 6s ease-in-out infinite',

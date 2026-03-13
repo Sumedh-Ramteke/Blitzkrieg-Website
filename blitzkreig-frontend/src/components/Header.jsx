@@ -28,7 +28,7 @@ export default function Header() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-slate-900/95 backdrop-blur-md border-b border-slate-800 py-3 shadow-lg'
+          ? 'bg-[#0d0d0d]/95 backdrop-blur-md border-b border-slate-800/60 py-3 shadow-lg'
           : 'bg-transparent py-5'
       }`}
     >
@@ -45,7 +45,7 @@ export default function Header() {
               <span className="block text-base font-extrabold tracking-tight text-white group-hover:text-vnit-gold-light transition-colors">
                 Blitzkrieg
               </span>
-              <span className="block text-[10px] font-semibold tracking-[0.2em] text-vnit-blue-glow uppercase">
+              <span className="block text-[10px] font-semibold tracking-[0.2em] text-vnit-gold uppercase">
                 Chess Club VNIT
               </span>
             </span>
@@ -105,7 +105,7 @@ export default function Header() {
             mobileOpen ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
           }`}
         >
-          <ul className="border border-slate-800 rounded-xl bg-slate-900/95 backdrop-blur-md divide-y divide-slate-800">
+          <ul className="border border-slate-800/60 rounded-xl bg-[#0d0d0d]/95 backdrop-blur-md divide-y divide-slate-800/60">
             {NAV_LINKS.map(({ label, to }) => (
               <li key={to}>
                 <NavLink

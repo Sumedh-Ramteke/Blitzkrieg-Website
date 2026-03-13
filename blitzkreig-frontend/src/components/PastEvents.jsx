@@ -21,7 +21,7 @@ function daysFromNow(dateStr) {
 function TagBadge({ label }) {
   return (
     <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide
-                     bg-vnit-blue/15 text-vnit-blue-glow border border-vnit-blue/25">
+                     bg-vnit-gold/15 text-vnit-gold border border-vnit-gold/30">
       {label}
     </span>
   )
@@ -38,7 +38,7 @@ function UpcomingCard({ event, index }) {
   return (
     <article
       className="relative rounded-2xl overflow-hidden border border-vnit-gold/30
-                 bg-gradient-to-br from-slate-800/80 via-slate-900 to-slate-800/60
+                 bg-gradient-to-br from-[#16120d]/95 via-[#0d0b08] to-[#16120d]/92
                  shadow-[0_0_40px_-8px_rgba(212,175,55,0.18)]
                  flex flex-col sm:flex-row animate-fade-in group"
       style={{ animationDelay: `${index * 0.12}s`, opacity: 0 }}
@@ -47,7 +47,7 @@ function UpcomingCard({ event, index }) {
       <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-vnit-gold via-vnit-gold/60 to-transparent" />
 
       {/* Image */}
-      <div className="sm:w-[35%] shrink-0 overflow-hidden bg-slate-800 relative">
+      <div className="sm:w-[35%] shrink-0 overflow-hidden bg-[#14110d] relative">
         <div className="relative h-56 sm:h-full min-h-[220px]">
           <img
             src={event.image_url || FALLBACK_IMG}
@@ -65,7 +65,7 @@ function UpcomingCard({ event, index }) {
                            uppercase shadow-lg backdrop-blur-sm border
                            ${isToday
                              ? 'bg-vnit-gold text-slate-900 border-vnit-gold/80 animate-pulse'
-                             : 'bg-slate-900/80 text-vnit-gold border-vnit-gold/40'}`}>
+                             : 'bg-[#14110d]/90 text-vnit-gold border-vnit-gold/40'}`}>
             {countdown}
           </div>
         </div>
@@ -150,7 +150,7 @@ function EventCard({ event, index }) {
       style={{ animationDelay: `${index * 0.1}s`, opacity: 0 }}
     >
       {/* ── Image Column — 30% desktop ── */}
-      <div className="sm:w-[30%] shrink-0 overflow-hidden bg-slate-800">
+      <div className="sm:w-[30%] shrink-0 overflow-hidden bg-[#14110d]">
         <div className="relative h-52 sm:h-full min-h-[200px]">
           <img
             src={event.image_url || FALLBACK_IMG}
@@ -197,7 +197,7 @@ function EventCard({ event, index }) {
             Tournament · VNIT Nagpur
           </div>
           <Link to={`/events/${event.id}`}
-                className="text-vnit-blue-glow hover:text-vnit-gold text-sm font-semibold
+                className="text-vnit-gold hover:text-vnit-gold-light text-sm font-semibold
                            flex items-center gap-1.5 transition-colors duration-200 group">
             Read more
             <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200"
@@ -215,7 +215,7 @@ function EventCard({ event, index }) {
 function EventSkeleton() {
   return (
     <div className="event-card flex-col sm:flex-row animate-pulse">
-      <div className="sm:w-[30%] bg-slate-800 min-h-[200px] sm:min-h-full rounded-l-2xl" />
+      <div className="sm:w-[30%] bg-[#14110d] min-h-[200px] sm:min-h-full rounded-l-2xl" />
       <div className="sm:w-[70%] p-6 lg:p-8 space-y-4">
         <div className="flex gap-3">
           <div className="h-3 w-24 bg-slate-700 rounded" />
@@ -294,7 +294,7 @@ export default function PastEvents({ searchQuery = '' }) {
   const isSearching = !!searchQuery
 
   return (
-    <section id="events" className="py-20 lg:py-28 bg-slate-900">
+    <section id="events" className="py-20 lg:py-28 bg-[#0d0d0d]">
       <div className="section-container space-y-20">
 
         {/* ── Loading / Error states ── */}
@@ -349,7 +349,7 @@ export default function PastEvents({ searchQuery = '' }) {
             {/* ── PAST EVENTS ── */}
             {past.length > 0 && (
               <div>
-                <SubHeading accent="from-vnit-blue" sub="Tournament History">
+                <SubHeading accent="from-vnit-gold" sub="Tournament History">
                   Past{' '}
                   <span className="text-gradient-blue-gold">Events</span>
                 </SubHeading>

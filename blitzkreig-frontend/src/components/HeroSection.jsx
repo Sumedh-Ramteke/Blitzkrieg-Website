@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import logoBackground from '../assets/blitzkrieg-logo-bg.png'
 
 /* ── Chess Board SVG — Fried Liver Attack (after 6.Nxf7!?) ────────── */
 function ChessBoardIllustration() {
@@ -22,24 +23,24 @@ function ChessBoardIllustration() {
     <div className="relative flex items-center justify-center w-full h-full select-none">
       {/* Backdrop glow rings */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-72 h-72 rounded-full bg-vnit-blue/20 blur-3xl animate-pulse-glow" />
-        <div className="absolute w-48 h-48 rounded-full bg-vnit-gold/15 blur-2xl animate-pulse-glow [animation-delay:1.2s]" />
+        <div className="w-72 h-72 rounded-full bg-vnit-gold/10 blur-3xl animate-pulse-glow" />
+        <div className="absolute w-48 h-48 rounded-full bg-vnit-gold/8 blur-2xl animate-pulse-glow [animation-delay:1.2s]" />
       </div>
 
       {/* Board Container */}
       <div className="relative z-10 w-64 h-64 sm:w-80 sm:h-80 lg:w-[360px] lg:h-[360px] animate-float">
         {/* Glow border */}
-        <div className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-vnit-blue/50 to-vnit-gold/30 blur-lg opacity-70" />
+        <div className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-vnit-gold/40 to-vnit-gold-dark/20 blur-lg opacity-70" />
 
         {/* Chess board */}
-        <div className="relative rounded-xl overflow-hidden border-2 border-slate-700 shadow-2xl">
+        <div className="relative rounded-xl overflow-hidden border-2 border-vnit-gold/30 shadow-2xl">
           <svg
             viewBox="0 0 320 320"
             xmlns="http://www.w3.org/2000/svg"
             className="w-full h-full"
           >
             {/* Board background */}
-            <rect width="320" height="320" fill="#1e293b" />
+            <rect width="320" height="320" fill="#0d0d0d" />
 
             {/* 8×8 squares */}
             {Array.from({ length: 8 }).map((_, row) =>
@@ -52,15 +53,15 @@ function ChessBoardIllustration() {
                     y={row * 40}
                     width="40"
                     height="40"
-                    fill={isDark ? '#1A56DB22' : '#ffffff08'}
-                    stroke="#1A56DB18"
+                    fill={isDark ? '#C9A84C18' : '#ffffff06'}
+                    stroke="#C9A84C14"
                     strokeWidth="0.5"
                   />
                 )
               })
             )}
 
-            {/* Dark squares with subtle blue tint */}
+            {/* Dark squares with subtle gold tint */}
             {Array.from({ length: 8 }).map((_, row) =>
               Array.from({ length: 8 }).map((_, col) => {
                 const isDark = (row + col) % 2 === 1
@@ -72,15 +73,15 @@ function ChessBoardIllustration() {
                     y={row * 40}
                     width="40"
                     height="40"
-                    fill="#1A56DB"
-                    opacity="0.12"
+                    fill="#C9A84C"
+                    opacity="0.10"
                   />
                 )
               })
             )}
 
             {/* Highlight the Nxf7 sacrifice square */}
-            <rect x={5*40} y={1*40} width="40" height="40" fill="#EAB308" opacity="0.15" rx="2" />
+            <rect x={5*40} y={1*40} width="40" height="40" fill="#C9A84C" opacity="0.18" rx="2" />
 
             {/* ── Pieces — centered in each cell ── */}
             {pieces.map(([piece, col, row], i) => (
@@ -92,9 +93,9 @@ function ChessBoardIllustration() {
                 dominantBaseline="central"
                 fontSize="28"
                 fill={
-                  piece === '♔' ? '#EAB308'
-                    : isWhite(piece) ? '#f1f5f9'
-                    : '#60A5FA'
+                  piece === '♔' ? '#C9A84C'
+                    : isWhite(piece) ? '#f5f5f0'
+                    : '#E8C96D'
                 }
                 opacity={piece === '♔' || piece === '♚' ? 0.95 : 0.8}
               >
@@ -125,16 +126,27 @@ export default function HeroSection() {
 
       {/* ── Background decorative elements ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Logo background image watermark */}
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
+                     w-[86vw] max-w-[744px] min-w-[288px] aspect-square
+                     bg-center bg-no-repeat bg-contain opacity-[0.18]"
+          style={{ backgroundImage: `url(${logoBackground})` }}
+        />
+
+        {/* Readability overlay over the logo */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/55 to-[#0d0d0d]/85" />
+
         {/* Large background glow */}
-        <div className="absolute top-1/4 right-0 w-[600px] h-[600px] rounded-full bg-vnit-blue/10 blur-3xl" />
-        <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] rounded-full bg-vnit-gold/8 blur-3xl" />
+        <div className="absolute top-1/4 right-0 w-[600px] h-[600px] rounded-full bg-vnit-gold/6 blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] rounded-full bg-vnit-gold/5 blur-3xl" />
         {/* Subtle grid pattern */}
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.025]"
           style={{
             backgroundImage: `
-              linear-gradient(#60A5FA 1px, transparent 1px),
-              linear-gradient(90deg, #60A5FA 1px, transparent 1px)
+              linear-gradient(#C9A84C 1px, transparent 1px),
+              linear-gradient(90deg, #C9A84C 1px, transparent 1px)
             `,
             backgroundSize: '64px 64px',
           }}
@@ -149,9 +161,9 @@ export default function HeroSection() {
 
             {/* Club badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full
-                            border border-vnit-blue/40 bg-vnit-blue/10 text-vnit-blue-glow
+                            border border-vnit-gold/40 bg-vnit-gold/10 text-vnit-gold
                             text-xs font-semibold tracking-widest uppercase">
-              <span className="w-1.5 h-1.5 rounded-full bg-vnit-blue animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-vnit-gold animate-pulse" />
               Blitzkrieg Chess Club · VNIT Nagpur
             </div>
 
@@ -175,8 +187,8 @@ export default function HeroSection() {
                 Search past tournaments & events
               </p>
               <div className="flex items-center gap-0 max-w-md rounded-xl
-                              border border-slate-700 bg-slate-800/60 backdrop-blur-sm
-                              focus-within:border-vnit-blue/60 focus-within:shadow-blue-glow/30
+                              border border-vnit-gold/20 bg-[#14110d]/95 backdrop-blur-sm
+                              focus-within:border-vnit-gold/50 focus-within:shadow-gold-glow/30
                               focus-within:shadow-lg transition-all duration-200 overflow-hidden">
                 {/* Search icon */}
                 <div className="pl-4 text-slate-500">
@@ -195,8 +207,8 @@ export default function HeroSection() {
                 />
                 <button
                   type="submit"
-                  className="m-1.5 px-5 py-2.5 rounded-lg bg-vnit-blue hover:bg-vnit-blue-light
-                             text-white text-sm font-semibold transition-colors duration-200 shrink-0"
+                  className="m-1.5 px-5 py-2.5 rounded-lg bg-vnit-gold hover:bg-vnit-gold-light
+                             text-slate-900 text-sm font-semibold transition-colors duration-200 shrink-0"
                 >
                   Search
                 </button>

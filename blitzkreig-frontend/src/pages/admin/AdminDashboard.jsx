@@ -62,7 +62,7 @@ export default function AdminDashboard() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <StatCard label="Total Events"      value={counts.events}    icon="♟" to="/admin/events"    color="text-vnit-blue-glow" />
+        <StatCard label="Total Events"      value={counts.events}    icon="♟" to="/admin/events"    color="text-vnit-gold" />
         <StatCard label="Committee Years"   value={counts.committee} icon="♞" to="/admin/committee" color="text-vnit-gold"      />
         <StatCard label="Admin Role"        value={user?.role}       icon="♔" to="/admin"           color="text-slate-300"     />
       </div>

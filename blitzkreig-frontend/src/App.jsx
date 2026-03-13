@@ -22,12 +22,12 @@ import ProtectedRoute      from './components/admin/ProtectedRoute'
 /* Public site wrapper — Header + Footer around an Outlet */
 function PublicLayout() {
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-[#0d0d0d] text-slate-100 flex flex-col">
       <Header />
       <main className="flex-1">
         <Outlet />
       </main>
-      <footer className="border-t border-slate-800 py-6 text-center text-slate-500 text-sm">
+      <footer className="border-t border-slate-800/70 py-6 text-center text-slate-600 text-sm">
         © {new Date().getFullYear()} Blitzkrieg Chess Club VNIT. All rights reserved.
       </footer>
     </div>

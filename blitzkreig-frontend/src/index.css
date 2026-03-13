@@ -22,11 +22,11 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-vnit-blue rounded-full;
+    @apply bg-vnit-gold-dark rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-vnit-blue-light;
+    @apply bg-vnit-gold;
   }
 }
 
@@ -35,17 +35,17 @@
   /* Primary CTA Button */
   .btn-primary {
     @apply inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold
-           bg-vnit-blue text-white
-           hover:bg-vnit-blue-light
-           shadow-blue-glow hover:shadow-none
+           bg-vnit-gold text-slate-900
+           hover:bg-vnit-gold-light
+           shadow-gold-glow hover:shadow-none
            transition-all duration-200 active:scale-95;
   }
 
   /* Ghost Button */
   .btn-ghost {
     @apply inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold
-           border border-slate-600 text-slate-300
-           hover:border-vnit-blue hover:text-vnit-blue-glow
+           border border-slate-700 text-slate-300
+           hover:border-vnit-gold hover:text-vnit-gold
            transition-all duration-200 active:scale-95;
   }
 
@@ -65,12 +65,14 @@
            bg-gradient-to-r from-vnit-gold to-vnit-gold-light rounded-full;
   }
 
+
   /* Event card base */
   .event-card {
-    @apply flex rounded-2xl overflow-hidden border border-slate-800
-           bg-slate-800/60 backdrop-blur-sm
-           hover:border-vnit-blue/50 hover:shadow-card-hover
-           transition-all duration-300;
+      @apply flex rounded-2xl overflow-hidden backdrop-blur-sm
+        hover:border-vnit-gold/40 hover:shadow-card-hover
+        transition-all duration-300;
+      border-color: rgba(201, 168, 76, 0.16);
+      background: linear-gradient(180deg, rgba(22, 18, 13, 0.96) 0%, rgba(13, 11, 8, 0.96) 100%);
   }
 
   /* Nav link */
@@ -93,18 +95,37 @@
 
 /* ─── Utility Extras ───────────────────────────────────────────────── */
 @layer utilities {
+  .panel-surface {
+    border: 1px solid rgba(201, 168, 76, 0.16);
+    background: linear-gradient(180deg, rgba(22, 18, 13, 0.96) 0%, rgba(13, 11, 8, 0.96) 100%);
+    backdrop-filter: blur(10px);
+  }
+
+  .field-surface {
+    background-color: rgba(20, 17, 13, 0.96);
+    border: 1px solid rgba(201, 168, 76, 0.2);
+    color: rgb(226 232 240);
+    transition: border-color 200ms ease, background-color 200ms ease;
+  }
+
+  .field-surface::placeholder {
+    color: rgb(100 116 139);
+  }
+
+  .field-surface:focus {
+    outline: none;
+    border-color: rgba(201, 168, 76, 0.55);
+    background-color: rgba(24, 20, 15, 0.98);
+  }
+
   .text-gradient-blue-gold {
-    background: linear-gradient(135deg, #60A5FA 0%, #EAB308 100%);
+    background: linear-gradient(135deg, #F5F5F0 0%, #C9A84C 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .glow-blue {
-    box-shadow: 0 0 32px 6px rgba(26, 86, 219, 0.5);
-  }
-
   .glow-gold {
-    box-shadow: 0 0 24px 4px rgba(234, 179, 8, 0.4);
+    box-shadow: 0 0 24px 4px rgba(201, 168, 76, 0.5);
   }
 }

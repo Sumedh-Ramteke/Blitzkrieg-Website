@@ -33,12 +33,12 @@ const EMPTY_FORM = {
 }
 
 const IC = 'w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 ' +
-           'placeholder:text-slate-600 focus:outline-none focus:border-vnit-blue transition-colors text-sm'
+           'placeholder:text-slate-600 focus:outline-none focus:border-vnit-gold transition-colors text-sm'
 
 function SecLabel({ children }) {
   return (
     <div className="flex items-center gap-3 pt-1">
-      <span className="text-[11px] font-bold tracking-widest uppercase text-vnit-blue-glow">{children}</span>
+      <span className="text-[11px] font-bold tracking-widest uppercase text-vnit-gold">{children}</span>
       <div className="flex-1 h-px bg-slate-800" />
     </div>
   )
@@ -101,7 +101,7 @@ function EventForm({ initial, onSave, onCancel, saving }) {
       <label className="flex items-center gap-2.5 cursor-pointer select-none">
         <input type="checkbox" checked={!!form.is_published}
           onChange={e => set('is_published', e.target.checked)}
-          className="w-4 h-4 accent-vnit-blue rounded" />
+          className="w-4 h-4 accent-vnit-gold rounded" />
         <span className="text-sm text-slate-300 font-medium">Published (visible on public site)</span>
       </label>
 
@@ -139,16 +139,16 @@ function EventForm({ initial, onSave, onCancel, saving }) {
             <input type="number" min="1" value={w.position}
               onChange={e => setWinner(i, 'position', e.target.value)}
               title="Position"
-              className="w-12 px-2 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-sm text-center focus:outline-none focus:border-vnit-blue" />
+              className="w-12 px-2 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-sm text-center focus:outline-none focus:border-vnit-gold" />
             <input value={w.name} onChange={e => setWinner(i, 'name', e.target.value)}
               placeholder="Name"
-              className="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder:text-slate-600 focus:outline-none focus:border-vnit-blue" />
+              className="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder:text-slate-600 focus:outline-none focus:border-vnit-gold" />
             <input value={w.rating || ''} onChange={e => setWinner(i, 'rating', e.target.value)}
               placeholder="Rating"
-              className="w-20 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder:text-slate-600 focus:outline-none focus:border-vnit-blue" />
+              className="w-20 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder:text-slate-600 focus:outline-none focus:border-vnit-gold" />
             <input value={w.category || ''} onChange={e => setWinner(i, 'category', e.target.value)}
               placeholder="Category"
-              className="w-28 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder:text-slate-600 focus:outline-none focus:border-vnit-blue" />
+              className="w-28 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder:text-slate-600 focus:outline-none focus:border-vnit-gold" />
             <button type="button" onClick={() => removeWinner(i)}
               className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors shrink-0">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -161,7 +161,7 @@ function EventForm({ initial, onSave, onCancel, saving }) {
           <p className="text-[11px] text-slate-600">Pos · Name · FIDE Rating (optional) · Category (optional)</p>
         )}
         <button type="button" onClick={addWinner}
-          className="text-sm text-vnit-blue-glow hover:text-vnit-gold transition-colors font-medium">
+          className="text-sm text-vnit-gold hover:text-vnit-gold transition-colors font-medium">
           + Add Winner
         </button>
       </div>
@@ -181,7 +181,7 @@ function EventForm({ initial, onSave, onCancel, saving }) {
           </div>
         ))}
         <button type="button" onClick={addGallery}
-          className="text-sm text-vnit-blue-glow hover:text-vnit-gold transition-colors font-medium">
+          className="text-sm text-vnit-gold hover:text-vnit-gold transition-colors font-medium">
           + Add Photo
         </button>
       </div>
@@ -377,8 +377,8 @@ export default function AdminEvents() {
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
                       <button onClick={() => setModal({ type: 'edit', event: ev })}
-                        className="px-3 py-1.5 rounded-lg text-xs font-semibold text-vnit-blue-glow
-                                   bg-vnit-blue/10 hover:bg-vnit-blue/20 border border-vnit-blue/20
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold text-vnit-gold
+                                   bg-vnit-gold/10 hover:bg-vnit-gold/20 border border-vnit-gold/20
                                    transition-colors">
                         Edit
                       </button>

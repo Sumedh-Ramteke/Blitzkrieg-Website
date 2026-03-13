@@ -6,11 +6,11 @@ import ImagePicker from '../../components/admin/ImagePicker'
 function Modal({ title, onClose, children }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-lg rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl">
+      <div className="panel-surface w-full max-w-lg rounded-2xl shadow-2xl">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
           <h3 className="text-lg font-bold text-slate-100">{title}</h3>
           <button onClick={onClose}
-            className="text-slate-500 hover:text-slate-200 transition-colors p-1 rounded-lg hover:bg-slate-800">
+            className="text-slate-500 hover:text-slate-200 transition-colors p-1 rounded-lg hover:bg-[#1a1510]">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -38,40 +38,35 @@ function MemberForm({ initial, onSave, onCancel, saving }) {
           <label className="text-sm font-medium text-slate-300">Full Name *</label>
           <input required value={form.name} onChange={e => set('name', e.target.value)}
             placeholder="e.g. Arjun Mehta"
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200
-                       placeholder:text-slate-600 focus:outline-none focus:border-vnit-blue transition-colors" />
+            className="field-surface w-full px-4 py-2.5 rounded-xl" />
         </div>
 
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-slate-300">Role / Position *</label>
           <input required value={form.role} onChange={e => set('role', e.target.value)}
             placeholder="e.g. President"
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200
-                       placeholder:text-slate-600 focus:outline-none focus:border-vnit-blue transition-colors" />
+            className="field-surface w-full px-4 py-2.5 rounded-xl" />
         </div>
 
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-slate-300">Academic Year *</label>
           <input required value={form.year_label} onChange={e => set('year_label', e.target.value)}
             placeholder="e.g. 2025-26"
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200
-                       placeholder:text-slate-600 focus:outline-none focus:border-vnit-blue transition-colors" />
+            className="field-surface w-full px-4 py-2.5 rounded-xl" />
         </div>
 
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-slate-300">Branch & Year</label>
           <input value={form.branch || ''} onChange={e => set('branch', e.target.value)}
             placeholder="e.g. CSE, 3rd Year"
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200
-                       placeholder:text-slate-600 focus:outline-none focus:border-vnit-blue transition-colors" />
+            className="field-surface w-full px-4 py-2.5 rounded-xl" />
         </div>
 
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-slate-300">Sort Order</label>
           <input type="number" min={0} value={form.sort_order}
             onChange={e => set('sort_order', parseInt(e.target.value, 10))}
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200
-                       focus:outline-none focus:border-vnit-blue transition-colors" />
+            className="field-surface w-full px-4 py-2.5 rounded-xl" />
         </div>
       </div>
 
@@ -83,7 +78,7 @@ function MemberForm({ initial, onSave, onCancel, saving }) {
       <label className="flex items-center gap-2.5 cursor-pointer select-none">
         <input type="checkbox" checked={form.is_active}
           onChange={e => set('is_active', e.target.checked)}
-          className="w-4 h-4 accent-vnit-blue rounded" />
+          className="w-4 h-4 accent-vnit-gold rounded" />
         <span className="text-sm text-slate-300 font-medium">Active (shown on site)</span>
       </label>
 
@@ -240,8 +235,8 @@ export default function AdminCommittee() {
             <button key={yr} onClick={() => setYearLabel(yr)}
               className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all ${
                 yr === yearLabel
-                  ? 'bg-vnit-blue border-vnit-blue text-white shadow-blue-glow'
-                  : 'border-slate-700 text-slate-400 hover:border-vnit-blue/50 hover:text-vnit-blue-glow'
+                  ? 'bg-vnit-gold border-vnit-gold text-slate-900 shadow-gold-glow'
+                  : 'border-slate-700 text-slate-400 hover:border-vnit-gold/50 hover:text-vnit-gold'
               }`}>
               {yr}
             </button>
@@ -272,14 +267,14 @@ export default function AdminCommittee() {
             </thead>
             <tbody className="divide-y divide-slate-800/60">
               {members.map(m => (
-                <tr key={m.id} className="hover:bg-slate-800/30 transition-colors group">
+                <tr key={m.id} className="hover:bg-[#1a1510]/70 transition-colors group">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       {m.image_url ? (
                         <img src={m.image_url} alt={m.name}
                           className="w-8 h-8 rounded-full object-cover border border-slate-700 shrink-0" />
                       ) : (
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-vnit-blue to-vnit-gold
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-vnit-gold-dark to-vnit-gold
                                         flex items-center justify-center text-xs font-bold text-slate-900 shrink-0">
                           {m.name.split(' ').map(w => w[0]).slice(0,2).join('')}
                         </div>
@@ -302,8 +297,8 @@ export default function AdminCommittee() {
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
                       <button onClick={() => setModal({ type: 'edit', member: m })}
-                        className="px-3 py-1.5 rounded-lg text-xs font-semibold text-vnit-blue-glow
-                                   bg-vnit-blue/10 hover:bg-vnit-blue/20 border border-vnit-blue/20 transition-colors">
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold text-vnit-gold
+                                   bg-vnit-gold/10 hover:bg-vnit-gold/20 border border-vnit-gold/20 transition-colors">
                         Edit
                       </button>
                       <button onClick={() => setModal({ type: 'delete', member: m })}

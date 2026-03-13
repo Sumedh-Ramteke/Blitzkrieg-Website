@@ -75,7 +75,7 @@ export default function AdminLayout() {
             <span className="text-xl">♔</span>
             <div className="leading-tight">
               <div className="text-sm font-extrabold text-white">Blitzkrieg</div>
-              <div className="text-[10px] font-semibold tracking-widest text-vnit-blue-glow uppercase">
+              <div className="text-[10px] font-semibold tracking-widest text-vnit-gold uppercase">
                 Admin Panel
               </div>
             </div>
@@ -92,8 +92,8 @@ export default function AdminLayout() {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150 ${
                   isActive
-                    ? 'bg-vnit-blue text-white shadow-blue-glow'
-                    : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
+                    ? 'bg-vnit-gold/20 text-vnit-gold border border-vnit-gold/30'
+                    : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-100'
                 }`
               }
             >

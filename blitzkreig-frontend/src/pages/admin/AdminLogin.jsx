@@ -34,7 +34,7 @@ export default function AdminLogin() {
       {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-96 h-96
-                        rounded-full bg-vnit-blue/10 blur-3xl" />
+                        rounded-full bg-vnit-gold/10 blur-3xl" />
       </div>
 
       <div className="relative w-full max-w-md">
@@ -79,7 +79,7 @@ export default function AdminLogin() {
                   autoComplete={name === 'password' ? 'current-password' : 'username'}
                   className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700
                              text-slate-200 placeholder:text-slate-600 focus:outline-none
-                             focus:border-vnit-blue transition-colors"
+                             focus:border-vnit-gold transition-colors"
                 />
               </div>
             ))}
@@ -106,7 +106,7 @@ export default function AdminLogin() {
             This area is restricted to authorised club administrators.
           </p>
           <p className="text-center">
-            <Link to="/admin/forgot-password" className="text-slate-500 hover:text-vnit-blue-glow text-sm transition-colors">
+            <Link to="/admin/forgot-password" className="text-slate-500 hover:text-vnit-gold text-sm transition-colors">
               Forgot Password?
             </Link>
           </p>

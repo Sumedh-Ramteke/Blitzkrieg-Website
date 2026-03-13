@@ -15,9 +15,7 @@ export default function Events() {
           placeholder="Search events..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="w-full max-w-md px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700
-                     text-slate-200 placeholder:text-slate-500 focus:outline-none
-                     focus:border-vnit-blue mb-8"
+          className="field-surface w-full max-w-md px-4 py-2.5 rounded-xl mb-8"
         />
       </div>
       <PastEvents searchQuery={search} />

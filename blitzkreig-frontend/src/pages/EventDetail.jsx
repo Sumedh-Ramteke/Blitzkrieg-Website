@@ -107,7 +107,7 @@ export default function EventDetail() {
 
         {/* ── Back link ── */}
         <Link to="/events"
-              className="inline-flex items-center gap-2 text-slate-500 hover:text-vnit-blue-glow
+              className="inline-flex items-center gap-2 text-slate-500 hover:text-vnit-gold
                          text-sm font-medium transition-colors">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -135,8 +135,8 @@ export default function EventDetail() {
             <div className="flex flex-wrap gap-3">
               {event.participants_count && (
                 <span className="flex items-center gap-2 px-4 py-2 rounded-xl
-                                 border border-slate-700 bg-slate-800/50 text-sm text-slate-300">
-                  <span className="text-vnit-blue-glow font-bold text-lg">{event.participants_count}</span>
+                               border border-slate-700 bg-slate-900/50 text-sm text-slate-300">
+                  <span className="text-vnit-gold font-bold text-lg">{event.participants_count}</span>
                   Participants
                 </span>
               )}
@@ -229,8 +229,8 @@ export default function EventDetail() {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {gallery.map((url, i) => (
                 <button key={i} onClick={() => setLightbox(i)}
-                        className="relative overflow-hidden rounded-xl aspect-video bg-slate-800
-                                   hover:ring-2 hover:ring-vnit-blue/50 transition-all duration-200 group">
+                className="relative overflow-hidden rounded-xl aspect-video bg-slate-900
+                                   hover:ring-2 hover:ring-vnit-gold/40 transition-all duration-200 group">
                   <img src={url} alt={`Photo ${i + 1}`}
                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                        loading="lazy" />

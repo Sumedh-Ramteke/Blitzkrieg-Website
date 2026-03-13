@@ -11,7 +11,7 @@ const { sendMail }    = require('../utils/mailer')
 const router = express.Router()
 const prisma = new PrismaClient()
 
-const CLUB_EMAIL = 'blitzkriegchessclub@gmail.com'
+const CLUB_EMAIL = process.env.CLUB_EMAIL || 'blitzkriegchessclub@gmail.com'
 
 // ── Rate limit for public contact form ─────────────────────────────
 const contactLimiter = rateLimit({

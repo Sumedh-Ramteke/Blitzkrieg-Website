@@ -4,7 +4,7 @@ import axios from 'axios'
 /* ── Role pill colour mapping ─────────────────────────────────────── */
 const ROLE_COLORS = {
   'President':            'bg-vnit-gold/20 text-vnit-gold border-vnit-gold/30',
-  'Vice President':       'bg-vnit-blue/20 text-vnit-blue-glow border-vnit-blue/30',
+  'Vice President':       'bg-vnit-gold/15 text-vnit-gold-light border-vnit-gold/25',
   'Secretary':            'bg-purple-500/15 text-purple-300 border-purple-500/25',
   'Treasurer':            'bg-emerald-500/15 text-emerald-300 border-emerald-500/25',
   'Events Head':          'bg-orange-500/15 text-orange-300 border-orange-500/25',
@@ -26,8 +26,8 @@ function MemberCard({ member, index }) {
 
   return (
     <div
-      className="group rounded-2xl border border-slate-800 bg-slate-800/50 p-6
-                 hover:border-vnit-blue/40 hover:shadow-card-hover hover:-translate-y-1
+      className="panel-surface group rounded-2xl p-6
+                 hover:border-vnit-gold/40 hover:shadow-card-hover hover:-translate-y-1
                  transition-all duration-300 animate-fade-in"
       style={{ animationDelay: `${index * 0.07}s`, opacity: 0 }}
     >
@@ -38,12 +38,12 @@ function MemberCard({ member, index }) {
             src={member.image_url}
             alt={member.name}
             className="w-20 h-20 rounded-full object-cover border-2 border-slate-700
-                       group-hover:border-vnit-blue/50 transition-colors"
+                       group-hover:border-vnit-gold/50 transition-colors"
           />
         ) : (
           <div className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-extrabold
-                          bg-gradient-to-br from-vnit-blue to-vnit-gold text-slate-900
-                          border-2 border-transparent group-hover:border-vnit-blue/50 transition-colors select-none">
+                          bg-gradient-to-br from-vnit-gold-dark to-vnit-gold text-slate-900
+                          border-2 border-transparent group-hover:border-vnit-gold/50 transition-colors select-none">
             {initials}
           </div>
         )}
@@ -76,7 +76,7 @@ function MemberCard({ member, index }) {
 /* ── Skeleton Loader ──────────────────────────────────────────────── */
 function MemberSkeleton() {
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-800/50 p-6 animate-pulse space-y-3">
+    <div className="panel-surface rounded-2xl p-6 animate-pulse space-y-3">
       <div className="w-20 h-20 rounded-full bg-slate-700" />
       <div className="h-4 w-3/4 bg-slate-700 rounded" />
       <div className="h-3 w-1/2 bg-slate-700 rounded" />
@@ -130,8 +130,8 @@ export default function Committee() {
         {/* ── Header ── */}
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <div className="h-px w-12 bg-gradient-to-r from-vnit-blue to-transparent" />
-            <span className="text-vnit-blue-glow text-xs font-semibold tracking-[0.25em] uppercase">
+            <div className="h-px w-12 bg-gradient-to-r from-vnit-gold to-transparent" />
+            <span className="text-vnit-gold text-xs font-semibold tracking-[0.25em] uppercase">
               Club Leadership
             </span>
           </div>
@@ -154,8 +154,8 @@ export default function Committee() {
                 onClick={() => setYearLabel(yr)}
                 className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all duration-200 ${
                   yr === yearLabel
-                    ? 'bg-vnit-blue border-vnit-blue text-white shadow-blue-glow'
-                    : 'border-slate-700 text-slate-400 hover:border-vnit-blue/50 hover:text-vnit-blue-glow'
+                    ? 'bg-vnit-gold border-vnit-gold text-slate-900 shadow-gold-glow'
+                    : 'border-slate-700 text-slate-400 hover:border-vnit-gold/50 hover:text-vnit-gold'
                 }`}
               >
                 {yr}

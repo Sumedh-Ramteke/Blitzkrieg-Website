@@ -60,8 +60,7 @@ export default function AdminChangePassword() {
             value={form.currentPassword}
             onChange={handleChange}
             required
-            className="w-full rounded-lg bg-slate-800 border border-slate-700 px-4 py-2.5 text-sm text-white
-                       placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-vnit-blue focus:border-transparent"
+            className="field-surface w-full rounded-lg px-4 py-2.5 text-sm text-white"
           />
         </div>
 
@@ -74,8 +73,7 @@ export default function AdminChangePassword() {
             onChange={handleChange}
             required
             minLength={6}
-            className="w-full rounded-lg bg-slate-800 border border-slate-700 px-4 py-2.5 text-sm text-white
-                       placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-vnit-blue focus:border-transparent"
+            className="field-surface w-full rounded-lg px-4 py-2.5 text-sm text-white"
           />
         </div>
 
@@ -88,15 +86,14 @@ export default function AdminChangePassword() {
             onChange={handleChange}
             required
             minLength={6}
-            className="w-full rounded-lg bg-slate-800 border border-slate-700 px-4 py-2.5 text-sm text-white
-                       placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-vnit-blue focus:border-transparent"
+            className="field-surface w-full rounded-lg px-4 py-2.5 text-sm text-white"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-vnit-blue hover:bg-vnit-blue/90 text-white font-semibold py-2.5 text-sm
+          className="w-full rounded-lg bg-vnit-gold hover:bg-vnit-gold-light text-slate-900 font-semibold py-2.5 text-sm
                      transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'Updating…' : 'Change Password'}

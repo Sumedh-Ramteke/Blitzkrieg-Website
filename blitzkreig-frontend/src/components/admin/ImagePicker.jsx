@@ -97,8 +97,8 @@ export default function ImagePicker({ value, onChange, type = 'cover' }) {
             onClick={() => { setTab(t); setUploadErr(null) }}
             className={`px-4 py-1.5 transition-colors capitalize ${
               tab === t
-                ? 'bg-vnit-blue text-white'
-                : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                ? 'bg-vnit-gold text-slate-900'
+                : 'bg-[#14110d] text-slate-400 hover:text-slate-200'
             }`}
           >
             {t === 'upload' ? '⬆ Upload File' : '🔗 Enter URL'}
@@ -116,8 +116,8 @@ export default function ImagePicker({ value, onChange, type = 'cover' }) {
           className={`relative flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed
                       px-6 py-7 cursor-pointer select-none transition-colors
                       ${dragOver
-                        ? 'border-vnit-blue bg-vnit-blue/10'
-                        : 'border-slate-700 hover:border-slate-500 bg-slate-800/40'
+                        ? 'border-vnit-gold bg-vnit-gold/10'
+                        : 'border-vnit-gold/20 hover:border-vnit-gold/40 bg-[#14110d]/70'
                       }
                       ${uploading ? 'pointer-events-none opacity-70' : ''}`}
         >
@@ -131,7 +131,7 @@ export default function ImagePicker({ value, onChange, type = 'cover' }) {
 
           {uploading ? (
             <>
-              <svg className="w-6 h-6 text-vnit-blue-glow animate-spin" fill="none" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-vnit-gold animate-spin" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
               </svg>
@@ -144,7 +144,7 @@ export default function ImagePicker({ value, onChange, type = 'cover' }) {
                   d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
               </svg>
               <p className="text-slate-400 text-xs text-center leading-relaxed">
-                <span className="text-vnit-blue-glow font-semibold">Click to browse</span>
+                <span className="text-vnit-gold font-semibold">Click to browse</span>
                 {' '}or drag &amp; drop<br/>
                 <span className="text-slate-600">JPEG · PNG · WebP · GIF — max 15 MB</span>
               </p>
@@ -161,8 +161,7 @@ export default function ImagePicker({ value, onChange, type = 'cover' }) {
           value={value || ''}
           onChange={e => { setUploadErr(null); onChange(e.target.value) }}
           placeholder="https://example.com/photo.jpg"
-          className="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200
-                     placeholder:text-slate-600 focus:outline-none focus:border-vnit-blue transition-colors text-sm"
+          className="field-surface w-full px-4 py-2.5 rounded-xl text-sm"
         />
       )}
 
@@ -178,7 +177,7 @@ export default function ImagePicker({ value, onChange, type = 'cover' }) {
 
       {/* ── Preview ── */}
       {value && (
-        <div className="relative w-full rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
+        <div className="relative w-full rounded-xl overflow-hidden border border-vnit-gold/20 bg-[#14110d]">
           <img
             src={value}
             alt="Preview"

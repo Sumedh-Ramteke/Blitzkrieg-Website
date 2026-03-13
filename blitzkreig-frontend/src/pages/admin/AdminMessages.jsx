@@ -72,7 +72,7 @@ export default function AdminMessages() {
               className={`rounded-xl border p-5 transition-colors ${
                 msg.is_read
                   ? 'border-slate-800 bg-slate-900/40'
-                  : 'border-vnit-blue/30 bg-vnit-blue/5'
+                  : 'border-vnit-gold/30 bg-vnit-gold/5'
               }`}
             >
               <div className="flex items-start justify-between gap-4">
@@ -80,12 +80,12 @@ export default function AdminMessages() {
                   <div className="flex items-center gap-3 mb-1">
                     <span className="font-semibold text-white text-sm">{msg.name}</span>
                     {!msg.is_read && (
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-vnit-blue/20 text-vnit-blue-glow border border-vnit-blue/30">
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-vnit-gold/20 text-vnit-gold border border-vnit-gold/30">
                         NEW
                       </span>
                     )}
                   </div>
-                  <a href={`mailto:${msg.email}`} className="text-xs text-vnit-blue-glow hover:underline">
+                  <a href={`mailto:${msg.email}`} className="text-xs text-vnit-gold hover:underline">
                     {msg.email}
                   </a>
                   <p className="text-slate-400 text-sm mt-2 whitespace-pre-wrap">{msg.message}</p>

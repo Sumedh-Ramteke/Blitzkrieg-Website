@@ -13,6 +13,7 @@ const { sendMail }    = require('../utils/mailer')
 
 const router = express.Router()
 const prisma = new PrismaClient()
+const CLUB_EMAIL = process.env.CLUB_EMAIL || 'blitzkriegchessclub@gmail.com'
 
 // ── Stricter rate limit for login attempts ─────────────────────────
 const loginLimiter = rateLimit({
@@ -136,7 +137,7 @@ router.get('/me', verifyToken, async (req, res) => {
 // ─────────────────────────────────────────────────────────────────────
 // POST /api/auth/forgot-password  (public)
 // Body: { username }
-// Sends a reset link to the admin email (blitzkriegchessclub@gmail.com).
+// Sends a reset link to the configured club email.
 // ─────────────────────────────────────────────────────────────────────
 const forgotLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -175,7 +176,7 @@ router.post('/forgot-password', forgotLimiter, [
     const resetUrl = `${frontendOrigin}/admin/reset-password?token=${resetToken}`
 
     await sendMail({
-      to:      'blitzkriegchessclub@gmail.com',
+      to:      CLUB_EMAIL,
       subject: `Password Reset Request for "${user.username}"`,
       html: `
         <h2>Password Reset — Blitzkrieg Chess Club</h2>
