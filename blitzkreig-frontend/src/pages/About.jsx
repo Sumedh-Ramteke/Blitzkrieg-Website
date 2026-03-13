@@ -31,7 +31,7 @@ export default function About() {
             { value: '200+', label: 'Members' },
             { value: '30+',  label: 'Events Hosted' },
           ].map(({ value, label }) => (
-            <div key={label} className="rounded-xl border border-vnit-gold/20 bg-slate-900/60 p-5 text-center">
+            <div key={label} className="panel-surface rounded-xl p-5 text-center">
               <div className="text-3xl font-extrabold text-vnit-gold">{value}</div>
               <div className="text-xs text-slate-500 mt-1 font-medium">{label}</div>
             </div>

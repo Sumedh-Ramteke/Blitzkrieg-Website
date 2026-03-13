@@ -6,12 +6,12 @@ import ImagePicker from '../../components/admin/ImagePicker'
 function Modal({ title, onClose, children }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-2xl rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl
+      <div className="panel-surface w-full max-w-2xl rounded-2xl shadow-2xl
                       flex flex-col max-h-[92vh]">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 shrink-0">
           <h3 className="text-lg font-bold text-slate-100">{title}</h3>
           <button onClick={onClose}
-            className="text-slate-500 hover:text-slate-200 transition-colors p-1 rounded-lg hover:bg-slate-800">
+            className="text-slate-500 hover:text-slate-200 transition-colors p-1 rounded-lg hover:bg-[#1a1510]">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -32,14 +32,13 @@ const EMPTY_FORM = {
   gallery: [],
 }
 
-const IC = 'w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 ' +
-           'placeholder:text-slate-600 focus:outline-none focus:border-vnit-gold transition-colors text-sm'
+const IC = 'field-surface w-full px-4 py-2.5 rounded-xl text-sm'
 
 function SecLabel({ children }) {
   return (
     <div className="flex items-center gap-3 pt-1">
-      <span className="text-[11px] font-bold tracking-widest uppercase text-vnit-gold">{children}</span>
-      <div className="flex-1 h-px bg-slate-800" />
+      <span className="text-[11px] font-bold tracking-widest uppercase text-vnit-blue-glow">{children}</span>
+      <div className="flex-1 h-px bg-vnit-gold/15" />
     </div>
   )
 }
@@ -139,16 +138,16 @@ function EventForm({ initial, onSave, onCancel, saving }) {
             <input type="number" min="1" value={w.position}
               onChange={e => setWinner(i, 'position', e.target.value)}
               title="Position"
-              className="w-12 px-2 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-sm text-center focus:outline-none focus:border-vnit-gold" />
+              className="field-surface w-12 px-2 py-2 rounded-xl text-sm text-center" />
             <input value={w.name} onChange={e => setWinner(i, 'name', e.target.value)}
               placeholder="Name"
-              className="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder:text-slate-600 focus:outline-none focus:border-vnit-gold" />
+              className="field-surface flex-1 px-3 py-2 rounded-xl text-sm" />
             <input value={w.rating || ''} onChange={e => setWinner(i, 'rating', e.target.value)}
               placeholder="Rating"
-              className="w-20 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder:text-slate-600 focus:outline-none focus:border-vnit-gold" />
+              className="field-surface w-20 px-3 py-2 rounded-xl text-sm" />
             <input value={w.category || ''} onChange={e => setWinner(i, 'category', e.target.value)}
               placeholder="Category"
-              className="w-28 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder:text-slate-600 focus:outline-none focus:border-vnit-gold" />
+              className="field-surface w-28 px-3 py-2 rounded-xl text-sm" />
             <button type="button" onClick={() => removeWinner(i)}
               className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors shrink-0">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -161,7 +160,7 @@ function EventForm({ initial, onSave, onCancel, saving }) {
           <p className="text-[11px] text-slate-600">Pos · Name · FIDE Rating (optional) · Category (optional)</p>
         )}
         <button type="button" onClick={addWinner}
-          className="text-sm text-vnit-gold hover:text-vnit-gold transition-colors font-medium">
+          className="text-sm text-vnit-blue-glow hover:text-vnit-gold transition-colors font-medium">
           + Add Winner
         </button>
       </div>
@@ -181,7 +180,7 @@ function EventForm({ initial, onSave, onCancel, saving }) {
           </div>
         ))}
         <button type="button" onClick={addGallery}
-          className="text-sm text-vnit-gold hover:text-vnit-gold transition-colors font-medium">
+          className="text-sm text-vnit-blue-glow hover:text-vnit-gold transition-colors font-medium">
           + Add Photo
         </button>
       </div>
@@ -353,7 +352,7 @@ export default function AdminEvents() {
             </thead>
             <tbody className="divide-y divide-slate-800/60">
               {events.map(ev => (
-                <tr key={ev.id} className="hover:bg-slate-800/30 transition-colors group">
+                <tr key={ev.id} className="hover:bg-[#1a1510]/70 transition-colors group">
                   <td className="px-6 py-4">
                     <div className="font-medium text-slate-200 group-hover:text-white transition-colors line-clamp-1">
                       {ev.title}

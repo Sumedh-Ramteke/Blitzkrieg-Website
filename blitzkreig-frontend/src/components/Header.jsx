@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
+import logoImage from '../assets/blitzkrieg-logo-bg.png'
 
 const NAV_LINKS = [
   { label: 'Home',      to: '/'          },
@@ -37,10 +38,12 @@ export default function Header() {
 
           {/* ── Logo ── */}
           <Link to="/" className="group flex items-center gap-2.5 shrink-0">
-            {/* King piece SVG icon */}
-            <span className="text-2xl select-none group-hover:animate-pulse-glow transition-all">
-              ♔
-            </span>
+            <img
+              src={logoImage}
+              alt="Blitzkrieg Logo"
+              className="w-9 h-9 object-contain rounded-full border border-vnit-gold/25 p-0.5
+                         bg-[#14110d]/90 group-hover:border-vnit-gold/60 transition-colors"
+            />
             <span className="leading-tight">
               <span className="block text-base font-extrabold tracking-tight text-white group-hover:text-vnit-gold-light transition-colors">
                 Blitzkrieg
