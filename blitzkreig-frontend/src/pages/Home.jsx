@@ -1,6 +1,7 @@
 import { useSearchParams } from 'react-router-dom'
 import HeroSection from '../components/HeroSection'
 import PastEvents from '../components/PastEvents'
+import SocialMediaSection from '../components/SocialMediaSection'
 
 export default function Home() {
   const [searchParams] = useSearchParams()
@@ -10,6 +11,7 @@ export default function Home() {
     <>
       <HeroSection />
       <PastEvents searchQuery={searchQuery} />
+      <SocialMediaSection />
     </>
   )
 }

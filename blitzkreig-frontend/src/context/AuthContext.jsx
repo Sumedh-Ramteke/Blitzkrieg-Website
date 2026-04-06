@@ -3,8 +3,8 @@ import axios from 'axios'
 
 const AuthContext = createContext(null)
 
-const TOKEN_KEY = 'blitzkreig_admin_token'
-const USER_KEY  = 'blitzkreig_admin_user'
+const TOKEN_KEY = 'blitzkrieg_admin_token'
+const USER_KEY  = 'blitzkrieg_admin_user'
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY) || null)

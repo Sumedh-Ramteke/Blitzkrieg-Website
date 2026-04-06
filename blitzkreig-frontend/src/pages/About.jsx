@@ -27,7 +27,7 @@ export default function About() {
         </div>
         <div className="grid grid-cols-3 gap-6 pt-4">
           {[
-            { value: '2019', label: 'Founded' },
+            { value: '2021', label: 'Founded' },
             { value: '200+', label: 'Members' },
             { value: '30+',  label: 'Events Hosted' },
           ].map(({ value, label }) => (

@@ -1,18 +1,14 @@
 {
-  "name": "blitzkreig-backend",
+  "name": "blitzkrieg-backend",
   "version": "1.0.0",
-  "description": "REST API for Blitzkreig Chess Club VNIT website",
+  "description": "REST API for Blitzkrieg Chess Club VNIT website",
   "main": "src/server.js",
   "type": "commonjs",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio",
-    "prisma:seed": "node prisma/seed.js"
+    "start": "node src/server.js"
   },
   "dependencies": {
-    "@prisma/client": "^5.10.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -28,7 +24,6 @@
     "sharp": "^0.34.5"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0",
-    "prisma": "^5.10.2"
+    "nodemon": "^3.1.0"
   }
 }

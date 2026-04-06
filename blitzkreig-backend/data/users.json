@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "password_hash": "$2a$12$5rqIo.hzd6bsznQNQuI82eRpBrzXYqwUcsz8ta6SnDuTedelgpl1O",
+    "role": "ADMIN",
+    "reset_token": null,
+    "reset_token_expiry": null,
+    "created_at": "2026-04-06T00:00:00.000Z"
+  }
+]

@@ -2,12 +2,41 @@
 
 const express  = require('express')
 const { body, param, query, validationResult } = require('express-validator')
-const { PrismaClient } = require('@prisma/client')
 
 const { verifyToken, requireRole } = require('../middleware/auth')
+const { nextId, readJson, writeJson } = require('../utils/contentStore')
 
 const router = express.Router()
-const prisma = new PrismaClient()
+const EVENTS_FILE = 'events.json'
+
+function normalizeEvent(event) {
+  return {
+    id: Number(event.id),
+    title: event.title,
+    date: new Date(event.date).toISOString(),
+    description: event.description,
+    image_url: event.image_url ?? null,
+    is_published: event.is_published !== false,
+    participants_count: event.participants_count ?? null,
+    prize_fund: event.prize_fund ?? null,
+    chess_results_url: event.chess_results_url ?? null,
+    brochure_url: event.brochure_url ?? null,
+    winners: Array.isArray(event.winners) ? event.winners : null,
+    gallery: Array.isArray(event.gallery) ? event.gallery : null,
+    created_by: event.created_by ?? null,
+    created_at: event.created_at || new Date().toISOString(),
+    updated_at: event.updated_at || new Date().toISOString(),
+  }
+}
+
+async function loadEvents() {
+  const rows = await readJson(EVENTS_FILE, [])
+  return Array.isArray(rows) ? rows.map(normalizeEvent) : []
+}
+
+async function saveEvents(rows) {
+  return writeJson(EVENTS_FILE, rows.map(normalizeEvent))
+}
 
 // ── Helper: send validation errors ────────────────────────────────
 function checkValidation(req, res) {
@@ -40,39 +69,31 @@ router.get(
     const skip   = (page - 1) * limit
 
     try {
-      const where = {
-        is_published: true,
-        ...(search && {
-          OR: [
-            { title:       { contains: search, mode: 'insensitive' } },
-            { description: { contains: search, mode: 'insensitive' } },
-          ],
-        }),
-      }
+      const eventsRows = await loadEvents()
+      const filtered = eventsRows
+        .filter(event => event.is_published)
+        .filter(event => {
+          if (!search) return true
+          const haystack = `${event.title} ${event.description}`.toLowerCase()
+          return haystack.includes(search.toLowerCase())
+        })
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
 
-      const [events, total] = await Promise.all([
-        prisma.event.findMany({
-          where,
-          orderBy: { date: 'desc' },
-          skip,
-          take: limit,
-          select: {
-            id:                 true,
-            title:              true,
-            date:               true,
-            description:        true,
-            image_url:          true,
-            participants_count: true,
-            prize_fund:         true,
-            chess_results_url:  true,
-            brochure_url:       true,
-            winners:            true,
-            gallery:            true,
-            created_at:         true,
-          },
-        }),
-        prisma.event.count({ where }),
-      ])
+      const total = filtered.length
+      const events = filtered.slice(skip, skip + limit).map(event => ({
+        id:                 event.id,
+        title:              event.title,
+        date:               event.date,
+        description:        event.description,
+        image_url:          event.image_url,
+        participants_count: event.participants_count,
+        prize_fund:         event.prize_fund,
+        chess_results_url:  event.chess_results_url,
+        brochure_url:       event.brochure_url,
+        winners:            event.winners,
+        gallery:            event.gallery,
+        created_at:         event.created_at,
+      }))
 
       return res.json({
         data:  events,
@@ -108,39 +129,31 @@ router.get(
     const skip   = (page - 1) * limit
 
     try {
-      const where = search
-        ? {
-            OR: [
-              { title:       { contains: search, mode: 'insensitive' } },
-              { description: { contains: search, mode: 'insensitive' } },
-            ],
-          }
-        : {}
+      const eventsRows = await loadEvents()
+      const filtered = eventsRows
+        .filter(event => {
+          if (!search) return true
+          const haystack = `${event.title} ${event.description}`.toLowerCase()
+          return haystack.includes(search.toLowerCase())
+        })
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
 
-      const [events, total] = await Promise.all([
-        prisma.event.findMany({
-          where,
-          orderBy: { date: 'desc' },
-          skip,
-          take: limit,
-          select: {
-            id:                 true,
-            title:              true,
-            date:               true,
-            description:        true,
-            image_url:          true,
-            is_published:       true,
-            participants_count: true,
-            prize_fund:         true,
-            chess_results_url:  true,
-            brochure_url:       true,
-            winners:            true,
-            gallery:            true,
-            created_at:         true,
-          },
-        }),
-        prisma.event.count({ where }),
-      ])
+      const total = filtered.length
+      const events = filtered.slice(skip, skip + limit).map(event => ({
+        id:                 event.id,
+        title:              event.title,
+        date:               event.date,
+        description:        event.description,
+        image_url:          event.image_url,
+        is_published:       event.is_published,
+        participants_count: event.participants_count,
+        prize_fund:         event.prize_fund,
+        chess_results_url:  event.chess_results_url,
+        brochure_url:       event.brochure_url,
+        winners:            event.winners,
+        gallery:            event.gallery,
+        created_at:         event.created_at,
+      }))
 
       return res.json({
         data: events,
@@ -164,9 +177,8 @@ router.get(
     if (checkValidation(req, res)) return
 
     try {
-      const event = await prisma.event.findFirst({
-        where: { id: req.params.id, is_published: true },
-      })
+      const events = await loadEvents()
+      const event = events.find(item => item.id === req.params.id && item.is_published)
       if (!event) return res.status(404).json({ error: 'Event not found.' })
       return res.json(event)
     } catch (err) {
@@ -226,22 +238,27 @@ router.post(
             brochure_url, winners, gallery } = req.body
 
     try {
-      const event = await prisma.event.create({
-        data: {
-          title,
-          date:               new Date(date),
-          description,
-          image_url:          image_url          || null,
-          is_published:       is_published !== undefined ? is_published : true,
-          participants_count: participants_count || null,
-          prize_fund:         prize_fund         || null,
-          chess_results_url:  chess_results_url  || null,
-          brochure_url:       brochure_url       || null,
-          winners:            winners            || null,
-          gallery:            gallery            || null,
-          created_by:         req.user.id,
-        },
+      const events = await loadEvents()
+      const now = new Date().toISOString()
+      const event = normalizeEvent({
+        id: nextId(events),
+        title,
+        date: new Date(date).toISOString(),
+        description,
+        image_url: image_url || null,
+        is_published: is_published !== undefined ? is_published : true,
+        participants_count: participants_count || null,
+        prize_fund: prize_fund || null,
+        chess_results_url: chess_results_url || null,
+        brochure_url: brochure_url || null,
+        winners: winners || null,
+        gallery: gallery || null,
+        created_by: req.user.id,
+        created_at: now,
+        updated_at: now,
       })
+      events.push(event)
+      await saveEvents(events)
       return res.status(201).json(event)
     } catch (err) {
       console.error('[POST /api/events]', err)
@@ -267,25 +284,28 @@ router.patch(
             brochure_url, winners, gallery } = req.body
 
     try {
-      const existing = await prisma.event.findUnique({ where: { id: req.params.id } })
+      const events = await loadEvents()
+      const existing = events.find(event => event.id === req.params.id)
       if (!existing) return res.status(404).json({ error: 'Event not found.' })
 
-      const updated = await prisma.event.update({
-        where: { id: req.params.id },
-        data: {
-          ...(title              !== undefined && { title }),
-          ...(date               !== undefined && { date: new Date(date) }),
-          ...(description        !== undefined && { description }),
-          ...(image_url          !== undefined && { image_url }),
-          ...(is_published       !== undefined && { is_published }),
-          ...(participants_count !== undefined && { participants_count: participants_count || null }),
-          ...(prize_fund         !== undefined && { prize_fund:         prize_fund        || null }),
-          ...(chess_results_url  !== undefined && { chess_results_url:  chess_results_url || null }),
-          ...(brochure_url       !== undefined && { brochure_url:       brochure_url      || null }),
-          ...(winners            !== undefined && { winners }),
-          ...(gallery            !== undefined && { gallery }),
-        },
+      const updated = normalizeEvent({
+        ...existing,
+        ...(title !== undefined && { title }),
+        ...(date !== undefined && { date: new Date(date).toISOString() }),
+        ...(description !== undefined && { description }),
+        ...(image_url !== undefined && { image_url }),
+        ...(is_published !== undefined && { is_published }),
+        ...(participants_count !== undefined && { participants_count: participants_count || null }),
+        ...(prize_fund !== undefined && { prize_fund: prize_fund || null }),
+        ...(chess_results_url !== undefined && { chess_results_url: chess_results_url || null }),
+        ...(brochure_url !== undefined && { brochure_url: brochure_url || null }),
+        ...(winners !== undefined && { winners }),
+        ...(gallery !== undefined && { gallery }),
+        updated_at: new Date().toISOString(),
       })
+
+      const updatedEvents = events.map(event => event.id === req.params.id ? updated : event)
+      await saveEvents(updatedEvents)
       return res.json(updated)
     } catch (err) {
       console.error('[PATCH /api/events/:id]', err)
@@ -307,10 +327,11 @@ router.delete(
     if (checkValidation(req, res)) return
 
     try {
-      const existing = await prisma.event.findUnique({ where: { id: req.params.id } })
+      const events = await loadEvents()
+      const existing = events.find(event => event.id === req.params.id)
       if (!existing) return res.status(404).json({ error: 'Event not found.' })
 
-      await prisma.event.delete({ where: { id: req.params.id } })
+      await saveEvents(events.filter(event => event.id !== req.params.id))
       return res.json({ message: 'Event deleted successfully.' })
     } catch (err) {
       console.error('[DELETE /api/events/:id]', err)

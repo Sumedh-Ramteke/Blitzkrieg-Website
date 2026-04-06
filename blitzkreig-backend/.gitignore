@@ -20,6 +20,3 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
-
-# Prisma generated client (re-generated on install)
-/node_modules/.prisma/

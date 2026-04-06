@@ -1,194 +1,128 @@
-# Blitzkreig Chess Club VNIT — Web Application
+# Blitzkrieg Website
 
-Full-stack web application for the Blitzkreig Chess Club at VNIT Nagpur.
+Production-ready full-stack website for Blitzkrieg Chess Club VNIT.
 
----
+This project now runs fully on JSON storage (no Prisma, no SQL database).
 
-## Project Structure
+## Stack
 
+- Frontend: React + Vite + Tailwind CSS
+- Backend: Node.js + Express
+- Storage: JSON files in `blitzkreig-backend/data`
+- Auth: JWT
+
+## Folder Layout
+
+```text
+Blitzkrieg Website/
+  blitzkreig-frontend/
+  blitzkreig-backend/
 ```
-Blitzkreig Website/
-├── blitzkreig-frontend/   # React + Vite + Tailwind CSS
-└── blitzkreig-backend/    # Node.js + Express + PostgreSQL (Prisma)
+
+## Prerequisites
+
+- Node.js 18+
+- npm 9+
+
+## Environment Configuration
+
+### Backend: `blitzkreig-backend/.env`
+
+Required variables:
+
+```env
+PORT=4000
+NODE_ENV=production
+CORS_ORIGIN=https://your-frontend-domain.com
+JWT_SECRET=replace-with-a-long-random-secret
+JWT_EXPIRES_IN=8h
+RESEND_API_KEY=your_resend_api_key
+CLUB_EMAIL=blitzkriegchessclub@gmail.com
 ```
 
----
+### Frontend: `blitzkreig-frontend/.env.local`
 
-## Quick Start
+```env
+VITE_YOUTUBE_API_KEY=your_youtube_data_api_key
+VITE_YOUTUBE_HANDLE=BlitzkriegVNIT
+```
 
-### Prerequisites
+## Local Development
 
-| Tool | Version |
-|------|---------|
-| Node.js | ≥ 18 |
-| npm | ≥ 9 |
-| PostgreSQL | ≥ 14 |
+Open 2 terminals.
 
----
-
-### 1. Backend Setup
+### Terminal 1 (Backend)
 
 ```bash
 cd blitzkreig-backend
-
-# Install dependencies
 npm install
-
-# Configure environment
-cp .env.example .env
-# Edit .env — set DATABASE_URL and JWT_SECRET
-
-# Run Prisma migrations
-npx prisma migrate dev --name init
-
-# Seed the database (creates admin user + sample events)
-npm run prisma:seed
-
-# Start the dev server
 npm run dev
-# API running at http://localhost:4000
 ```
 
-**Default admin credentials (after seed):**
-- Username: `admin`
-- Password: `Admin@1234`
-- ⚠️ Change this immediately in production.
+Backend runs at `http://localhost:4000`.
 
----
-
-### 2. Frontend Setup
+### Terminal 2 (Frontend)
 
 ```bash
 cd blitzkreig-frontend
-
-# Install dependencies
 npm install
-
-# Start the dev server
 npm run dev
-# App running at http://localhost:5173
 ```
 
-The Vite dev server is pre-configured to proxy `/api/*` requests to the backend on port 4000.
+Frontend runs at `http://localhost:5173`.
 
----
+## Production Build and Run
 
-## API Reference
+### 1) Install dependencies
 
-### Authentication
-
-| Method | Route | Auth | Description |
-|--------|-------|------|-------------|
-| `POST` | `/api/auth/login` | Public | Login, returns JWT |
-| `GET`  | `/api/auth/me`    | Bearer | Current user profile |
-
-#### POST /api/auth/login
-
-```json
-// Request body
-{ "username": "admin", "password": "Admin@1234" }
-
-// Response
-{ "token": "<jwt>", "user": { "id": 1, "username": "admin", "role": "SUPER_ADMIN" } }
+```bash
+cd blitzkreig-backend && npm ci
+cd ../blitzkreig-frontend && npm ci
 ```
 
----
+### 2) Build frontend
 
-### Events
-
-| Method | Route | Auth | Description |
-|--------|-------|------|-------------|
-| `GET`    | `/api/events`     | Public | List all published events |
-| `GET`    | `/api/events/:id` | Public | Get single event |
-| `POST`   | `/api/events`     | Admin  | Create new event |
-| `PATCH`  | `/api/events/:id` | Admin  | Update event |
-| `DELETE` | `/api/events/:id` | Admin  | Delete event |
-
-#### GET /api/events query params
-
-| Param | Type | Description |
-|-------|------|-------------|
-| `search` | string | Filter by title/description |
-| `page` | int | Page number (default: 1) |
-| `limit` | int | Results per page (default: 20, max: 100) |
-
-#### POST/PATCH /api/events body
-
-```json
-{
-  "title": "Spring Tournament 2025",
-  "date": "2025-03-15T10:00:00Z",
-  "description": "Annual spring rapid chess tournament.",
-  "image_url": "https://example.com/image.jpg",
-  "is_published": true
-}
+```bash
+cd blitzkreig-frontend
+npm run build
 ```
 
-Use the JWT from login in the `Authorization: Bearer <token>` header for protected routes.
+### 3) Run backend in production mode
 
----
-
-## Design System
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| `bg-slate-900` | `#0f172a` | Page background |
-| `text-slate-100` | `#f1f5f9` | Body text |
-| `vnit-blue` | `#1A56DB` | Primary accent |
-| `vnit-gold` | `#EAB308` | Secondary accent |
-
----
-
-## Database Schema
-
-```
-User
- ├─ id            Int           (PK, auto)
- ├─ username      String        (unique)
- ├─ password_hash String        (bcrypt, rounds=12)
- ├─ role          Role          (ADMIN | SUPER_ADMIN)
- └─ created_at    DateTime
-
-Event
- ├─ id            Int           (PK, auto)
- ├─ title         String
- ├─ date          DateTime
- ├─ description   String (text)
- ├─ image_url     String?
- ├─ is_published  Boolean       (default: true)
- ├─ created_by    Int?          (FK → User)
- └─ created_at    DateTime
+```bash
+cd blitzkreig-backend
+NODE_ENV=production npm start
 ```
 
----
+### 4) Serve frontend
 
-## Available Scripts
+Serve `blitzkreig-frontend/dist` with Nginx, Apache, or any static hosting service.
 
-### Frontend (`blitzkreig-frontend/`)
+## Deployment Notes
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start Vite dev server (port 5173) |
-| `npm run build` | Production build → `dist/` |
-| `npm run preview` | Preview production build |
+- Store environment secrets on the server, never in git.
+- Keep `JWT_SECRET` strong and unique.
+- Set `CORS_ORIGIN` to your real frontend domain.
+- Ensure `blitzkreig-backend/public/uploads` is writable.
+- Back up JSON data files regularly:
+  - `blitzkreig-backend/data/events.json`
+  - `blitzkreig-backend/data/committee.json`
+  - `blitzkreig-backend/data/users.json`
+  - `blitzkreig-backend/data/contactMessages.json`
 
-### Backend (`blitzkreig-backend/`)
+## Useful Commands
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start with nodemon |
-| `npm start` | Start production server |
-| `npm run prisma:migrate` | Apply Prisma migrations |
-| `npm run prisma:studio` | Open Prisma Studio UI |
-| `npm run prisma:seed` | Seed the database |
+Backend:
 
----
+```bash
+npm run dev
+npm start
+```
 
-## Security Notes
+Frontend:
 
-- Passwords are hashed with **bcrypt** (12 salt rounds)
-- JWTs expire after **8 hours** by default
-- Login is rate-limited to **10 attempts per 15 minutes**
-- All routes use **Helmet** security headers
-- Global rate limiter: **200 req / 15 min**
-- Constant-time comparison on login (username enumeration prevention)
+```bash
+npm run dev
+npm run build
+npm run preview
+```

@@ -6,14 +6,14 @@ const bcrypt     = require('bcryptjs')
 const jwt        = require('jsonwebtoken')
 const rateLimit  = require('express-rate-limit')
 const { body, validationResult } = require('express-validator')
-const { PrismaClient } = require('@prisma/client')
 
 const { verifyToken } = require('../middleware/auth')
 const { sendMail }    = require('../utils/mailer')
+const { readJson, writeJson, nextId } = require('../utils/contentStore')
 
 const router = express.Router()
-const prisma = new PrismaClient()
 const CLUB_EMAIL = process.env.CLUB_EMAIL || 'blitzkriegchessclub@gmail.com'
+const USERS_FILE = 'users.json'
 
 // ── Stricter rate limit for login attempts ─────────────────────────
 const loginLimiter = rateLimit({
@@ -51,7 +51,8 @@ router.post('/login', loginLimiter, loginValidation, async (req, res) => {
 
   try {
     // 2. Look up user
-    const user = await prisma.user.findUnique({ where: { username } })
+    const users = await readJson(USERS_FILE, [])
+    const user = users.find(u => u.username === username)
 
     // 3. Constant-time comparison even on miss (prevent username enumeration)
     const dummyHash = '$2a$12$invalidhashforenumerationprevention000000000000000000'
@@ -100,14 +101,16 @@ router.patch('/change-password', verifyToken, changePasswordValidation, async (r
   const { currentPassword, newPassword } = req.body
 
   try {
-    const user = await prisma.user.findUnique({ where: { id: req.user.id } })
+    const users = await readJson(USERS_FILE, [])
+    const user = users.find(u => u.id === req.user.id)
     if (!user) return res.status(404).json({ error: 'User not found.' })
 
     const isMatch = await bcrypt.compare(currentPassword, user.password_hash)
     if (!isMatch) return res.status(401).json({ error: 'Current password is incorrect.' })
 
     const password_hash = await bcrypt.hash(newPassword, 12)
-    await prisma.user.update({ where: { id: user.id }, data: { password_hash } })
+    const updatedUsers = users.map(u => u.id === user.id ? { ...u, password_hash } : u)
+    await writeJson(USERS_FILE, updatedUsers)
 
     return res.json({ message: 'Password changed successfully.' })
   } catch (err) {
@@ -122,12 +125,10 @@ router.patch('/change-password', verifyToken, changePasswordValidation, async (r
 // ─────────────────────────────────────────────────────────────────────
 router.get('/me', verifyToken, async (req, res) => {
   try {
-    const user = await prisma.user.findUnique({
-      where:  { id: req.user.id },
-      select: { id: true, username: true, role: true, created_at: true },
-    })
+    const users = await readJson(USERS_FILE, [])
+    const user = users.find(u => u.id === req.user.id)
     if (!user) return res.status(404).json({ error: 'User not found.' })
-    return res.json({ user })
+    return res.json({ user: { id: user.id, username: user.username, role: user.role, created_at: user.created_at } })
   } catch (err) {
     console.error('[/api/auth/me]', err)
     return res.status(500).json({ error: 'Internal server error.' })
@@ -159,7 +160,8 @@ router.post('/forgot-password', forgotLimiter, [
   const genericMsg = { message: 'If the account exists, a reset link has been sent to the club email.' }
 
   try {
-    const user = await prisma.user.findUnique({ where: { username: req.body.username } })
+    const users = await readJson(USERS_FILE, [])
+    const user = users.find(u => u.username === req.body.username)
     if (!user) return res.json(genericMsg)
 
     // Generate a secure reset token (valid for 1 hour)
@@ -167,10 +169,8 @@ router.post('/forgot-password', forgotLimiter, [
     const resetTokenHash = crypto.createHash('sha256').update(resetToken).digest('hex')
     const expiry = new Date(Date.now() + 60 * 60 * 1000)
 
-    await prisma.user.update({
-      where: { id: user.id },
-      data:  { reset_token: resetTokenHash, reset_token_expiry: expiry },
-    })
+    const updatedUsers = users.map(u => u.id === user.id ? { ...u, reset_token: resetTokenHash, reset_token_expiry: expiry } : u)
+    await writeJson(USERS_FILE, updatedUsers)
 
     const frontendOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173'
     const resetUrl = `${frontendOrigin}/admin/reset-password?token=${resetToken}`
@@ -212,22 +212,23 @@ router.post('/reset-password', [
   const tokenHash = crypto.createHash('sha256').update(token).digest('hex')
 
   try {
-    const user = await prisma.user.findFirst({
-      where: {
-        reset_token: tokenHash,
-        reset_token_expiry: { gt: new Date() },
-      },
-    })
+    const users = await readJson(USERS_FILE, [])
+    const user = users.find(u =>
+      u.reset_token === tokenHash &&
+      u.reset_token_expiry &&
+      new Date(u.reset_token_expiry) > new Date()
+    )
 
     if (!user) {
       return res.status(400).json({ error: 'Invalid or expired reset token.' })
     }
 
     const password_hash = await bcrypt.hash(newPassword, 12)
-    await prisma.user.update({
-      where: { id: user.id },
-      data:  { password_hash, reset_token: null, reset_token_expiry: null },
-    })
+    const updatedUsers = users.map(u => u.id === user.id
+      ? { ...u, password_hash, reset_token: null, reset_token_expiry: null }
+      : u
+    )
+    await writeJson(USERS_FILE, updatedUsers)
 
     return res.json({ message: 'Password has been reset successfully.' })
   } catch (err) {

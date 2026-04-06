@@ -2,12 +2,36 @@
 
 const express = require('express')
 const { body, param, query, validationResult } = require('express-validator')
-const { PrismaClient } = require('@prisma/client')
 
 const { verifyToken, requireRole } = require('../middleware/auth')
+const { nextId, readJson, writeJson } = require('../utils/contentStore')
 
 const router = express.Router()
-const prisma  = new PrismaClient()
+const COMMITTEE_FILE = 'committee.json'
+
+function normalizeMember(member) {
+  return {
+    id: Number(member.id),
+    name: member.name,
+    role: member.role,
+    year_label: member.year_label,
+    branch: member.branch ?? null,
+    image_url: member.image_url ?? null,
+    sort_order: Number(member.sort_order) || 100,
+    is_active: member.is_active !== false,
+    created_at: member.created_at || new Date().toISOString(),
+    updated_at: member.updated_at || new Date().toISOString(),
+  }
+}
+
+async function loadMembers() {
+  const rows = await readJson(COMMITTEE_FILE, [])
+  return Array.isArray(rows) ? rows.map(normalizeMember) : []
+}
+
+async function saveMembers(rows) {
+  return writeJson(COMMITTEE_FILE, rows.map(normalizeMember))
+}
 
 function checkValidation(req, res) {
   const errors = validationResult(req)
@@ -27,32 +51,31 @@ router.get(
     if (checkValidation(req, res)) return
 
     try {
-      // If no year given, use the most recent year_label in the DB
+      const rows = await loadMembers()
+
+      // If no year given, use the most recent year_label with active members
       let yearLabel = req.query.year
       if (!yearLabel) {
-        const latest = await prisma.committeeMember.findFirst({
-          where:   { is_active: true },
-          orderBy: { year_label: 'desc' },
-          select:  { year_label: true },
-        })
+        const latest = rows
+          .filter(member => member.is_active)
+          .sort((a, b) => b.year_label.localeCompare(a.year_label))[0]
         yearLabel = latest?.year_label || null
       }
 
       if (!yearLabel) return res.json({ year_label: null, data: [] })
 
-      const members = await prisma.committeeMember.findMany({
-        where:   { year_label: yearLabel, is_active: true },
-        orderBy: { sort_order: 'asc' },
-        select: {
-          id:         true,
-          name:       true,
-          role:       true,
-          year_label: true,
-          branch:     true,
-          image_url:  true,
-          sort_order: true,
-        },
-      })
+      const members = rows
+        .filter(member => member.year_label === yearLabel && member.is_active)
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map(member => ({
+          id:         member.id,
+          name:       member.name,
+          role:       member.role,
+          year_label: member.year_label,
+          branch:     member.branch,
+          image_url:  member.image_url,
+          sort_order: member.sort_order,
+        }))
 
       return res.json({ year_label: yearLabel, data: members })
     } catch (err) {
@@ -68,12 +91,10 @@ router.get(
 // ─────────────────────────────────────────────────────────────────────
 router.get('/years', async (_req, res) => {
   try {
-    const rows = await prisma.committeeMember.groupBy({
-      by:      ['year_label'],
-      where:   { is_active: true },
-      orderBy: { year_label: 'desc' },
-    })
-    return res.json(rows.map(r => r.year_label))
+    const rows = await loadMembers()
+    const years = [...new Set(rows.filter(member => member.is_active).map(member => member.year_label))]
+      .sort((a, b) => b.localeCompare(a))
+    return res.json(years)
   } catch (err) {
     console.error('[GET /api/committee/years]', err)
     return res.status(500).json({ error: 'Internal server error.' })
@@ -120,15 +141,22 @@ router.post(
     if (checkValidation(req, res)) return
     const { name, role, year_label, branch, image_url, sort_order, is_active } = req.body
     try {
-      const member = await prisma.committeeMember.create({
-        data: {
-          name, role, year_label,
-          branch:     branch     ?? null,
-          image_url:  image_url  ?? null,
-          sort_order: sort_order ?? 100,
-          is_active:  is_active  !== undefined ? is_active : true,
-        },
+      const members = await loadMembers()
+      const now = new Date().toISOString()
+      const member = normalizeMember({
+        id: nextId(members),
+        name,
+        role,
+        year_label,
+        branch: branch ?? null,
+        image_url: image_url ?? null,
+        sort_order: sort_order ?? 100,
+        is_active: is_active !== undefined ? is_active : true,
+        created_at: now,
+        updated_at: now,
       })
+      members.push(member)
+      await saveMembers(members)
       return res.status(201).json(member)
     } catch (err) {
       console.error('[POST /api/committee]', err)
@@ -149,21 +177,24 @@ router.patch(
     if (checkValidation(req, res)) return
     const { name, role, year_label, branch, image_url, sort_order, is_active } = req.body
     try {
-      const existing = await prisma.committeeMember.findUnique({ where: { id: req.params.id } })
+      const members = await loadMembers()
+      const existing = members.find(member => member.id === req.params.id)
       if (!existing) return res.status(404).json({ error: 'Member not found.' })
 
-      const updated = await prisma.committeeMember.update({
-        where: { id: req.params.id },
-        data: {
-          ...(name        !== undefined && { name }),
-          ...(role        !== undefined && { role }),
-          ...(year_label  !== undefined && { year_label }),
-          ...(branch      !== undefined && { branch }),
-          ...(image_url   !== undefined && { image_url }),
-          ...(sort_order  !== undefined && { sort_order }),
-          ...(is_active   !== undefined && { is_active }),
-        },
+      const updated = normalizeMember({
+        ...existing,
+        ...(name !== undefined && { name }),
+        ...(role !== undefined && { role }),
+        ...(year_label !== undefined && { year_label }),
+        ...(branch !== undefined && { branch }),
+        ...(image_url !== undefined && { image_url }),
+        ...(sort_order !== undefined && { sort_order }),
+        ...(is_active !== undefined && { is_active }),
+        updated_at: new Date().toISOString(),
       })
+
+      const updatedMembers = members.map(member => member.id === req.params.id ? updated : member)
+      await saveMembers(updatedMembers)
       return res.json(updated)
     } catch (err) {
       console.error('[PATCH /api/committee/:id]', err)
@@ -183,9 +214,10 @@ router.delete(
   async (req, res) => {
     if (checkValidation(req, res)) return
     try {
-      const existing = await prisma.committeeMember.findUnique({ where: { id: req.params.id } })
+      const members = await loadMembers()
+      const existing = members.find(member => member.id === req.params.id)
       if (!existing) return res.status(404).json({ error: 'Member not found.' })
-      await prisma.committeeMember.delete({ where: { id: req.params.id } })
+      await saveMembers(members.filter(member => member.id !== req.params.id))
       return res.json({ message: 'Member deleted successfully.' })
     } catch (err) {
       console.error('[DELETE /api/committee/:id]', err)

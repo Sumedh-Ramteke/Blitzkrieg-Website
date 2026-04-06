@@ -3,15 +3,15 @@
 const express   = require('express')
 const rateLimit = require('express-rate-limit')
 const { body, validationResult } = require('express-validator')
-const { PrismaClient } = require('@prisma/client')
 
 const { verifyToken } = require('../middleware/auth')
 const { sendMail }    = require('../utils/mailer')
+const { readJson, writeJson, nextId } = require('../utils/contentStore')
 
 const router = express.Router()
-const prisma = new PrismaClient()
 
 const CLUB_EMAIL = process.env.CLUB_EMAIL || 'blitzkriegchessclub@gmail.com'
+const CONTACT_MESSAGES_FILE = 'contactMessages.json'
 
 // ── Rate limit for public contact form ─────────────────────────────
 const contactLimiter = rateLimit({
@@ -42,10 +42,22 @@ router.post('/', contactLimiter, contactValidation, async (req, res) => {
   const { name, email, message } = req.body
 
   try {
-    // Save to database
-    const msg = await prisma.contactMessage.create({
-      data: { name, email, message },
-    })
+    // Read existing messages
+    const messages = await readJson(CONTACT_MESSAGES_FILE, [])
+
+    // Create new message
+    const newMessage = {
+      id: nextId(messages),
+      name,
+      email,
+      message,
+      is_read: false,
+      created_at: new Date().toISOString(),
+    }
+
+    // Save to file
+    messages.push(newMessage)
+    await writeJson(CONTACT_MESSAGES_FILE, messages)
 
     // Send email notification (fire-and-forget — don't block response)
     sendMail({
@@ -58,7 +70,7 @@ router.post('/', contactLimiter, contactValidation, async (req, res) => {
         <hr/>
         <p>${message.replace(/\n/g, '<br/>')}</p>
         <hr/>
-        <p style="color:#888;font-size:12px;">Message ID: ${msg.id} · ${new Date().toISOString()}</p>
+        <p style="color:#888;font-size:12px;">Message ID: ${newMessage.id} · ${new Date().toISOString()}</p>
       `,
     }).catch(err => console.error('[Contact email notification failed]', err))
 
@@ -75,10 +87,10 @@ router.post('/', contactLimiter, contactValidation, async (req, res) => {
 // ─────────────────────────────────────────────────────────────────────
 router.get('/messages', verifyToken, async (_req, res) => {
   try {
-    const messages = await prisma.contactMessage.findMany({
-      orderBy: { created_at: 'desc' },
-    })
-    return res.json({ messages })
+    const messages = await readJson(CONTACT_MESSAGES_FILE, [])
+    // Sort by created_at descending (newest first)
+    const sorted = messages.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    return res.json({ messages: sorted })
   } catch (err) {
     console.error('[GET /api/contact/messages]', err)
     return res.status(500).json({ error: 'Internal server error.' })
@@ -91,10 +103,16 @@ router.get('/messages', verifyToken, async (_req, res) => {
 // ─────────────────────────────────────────────────────────────────────
 router.patch('/messages/:id/read', verifyToken, async (req, res) => {
   try {
-    await prisma.contactMessage.update({
-      where: { id: Number(req.params.id) },
-      data:  { is_read: true },
-    })
+    const messages = await readJson(CONTACT_MESSAGES_FILE, [])
+    const msgIndex = messages.findIndex(m => m.id === Number(req.params.id))
+
+    if (msgIndex === -1) {
+      return res.status(404).json({ error: 'Message not found.' })
+    }
+
+    messages[msgIndex].is_read = true
+    await writeJson(CONTACT_MESSAGES_FILE, messages)
+
     return res.json({ message: 'Marked as read.' })
   } catch (err) {
     console.error('[PATCH /api/contact/messages/:id/read]', err)
@@ -107,9 +125,14 @@ router.patch('/messages/:id/read', verifyToken, async (req, res) => {
 // ─────────────────────────────────────────────────────────────────────
 router.delete('/messages/:id', verifyToken, async (req, res) => {
   try {
-    await prisma.contactMessage.delete({
-      where: { id: Number(req.params.id) },
-    })
+    const messages = await readJson(CONTACT_MESSAGES_FILE, [])
+    const filtered = messages.filter(m => m.id !== Number(req.params.id))
+
+    if (filtered.length === messages.length) {
+      return res.status(404).json({ error: 'Message not found.' })
+    }
+
+    await writeJson(CONTACT_MESSAGES_FILE, filtered)
     return res.json({ message: 'Message deleted.' })
   } catch (err) {
     console.error('[DELETE /api/contact/messages/:id]', err)
