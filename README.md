@@ -8,15 +8,15 @@ This project now runs fully on JSON storage (no Prisma, no SQL database).
 
 - Frontend: React + Vite + Tailwind CSS
 - Backend: Node.js + Express
-- Storage: JSON files in `blitzkreig-backend/data`
+- Storage: JSON files in `blitzkrieg-backend/data`
 - Auth: JWT
 
 ## Folder Layout
 
 ```text
 Blitzkrieg Website/
-  blitzkreig-frontend/
-  blitzkreig-backend/
+  blitzkrieg-frontend/
+  blitzkrieg-backend/
 ```
 
 ## Prerequisites
@@ -26,7 +26,7 @@ Blitzkrieg Website/
 
 ## Environment Configuration
 
-### Backend: `blitzkreig-backend/.env`
+### Backend: `blitzkrieg-backend/.env`
 
 Required variables:
 
@@ -40,12 +40,21 @@ RESEND_API_KEY=your_resend_api_key
 CLUB_EMAIL=blitzkriegchessclub@gmail.com
 ```
 
-### Frontend: `blitzkreig-frontend/.env.local`
+### Frontend: `blitzkrieg-frontend/.env.local`
 
 ```env
 VITE_YOUTUBE_API_KEY=your_youtube_data_api_key
 VITE_YOUTUBE_HANDLE=BlitzkriegVNIT
 ```
+
+### Default Admin Login
+
+The JSON seed includes one initial admin account:
+
+- Username: `admin`
+- Password: `Blitzkrieg@123`
+
+Change it after the first login.
 
 ## Local Development
 
@@ -54,7 +63,7 @@ Open 2 terminals.
 ### Terminal 1 (Backend)
 
 ```bash
-cd blitzkreig-backend
+cd blitzkrieg-backend
 npm install
 npm run dev
 ```
@@ -64,7 +73,7 @@ Backend runs at `http://localhost:4000`.
 ### Terminal 2 (Frontend)
 
 ```bash
-cd blitzkreig-frontend
+cd blitzkrieg-frontend
 npm install
 npm run dev
 ```
@@ -76,39 +85,39 @@ Frontend runs at `http://localhost:5173`.
 ### 1) Install dependencies
 
 ```bash
-cd blitzkreig-backend && npm ci
-cd ../blitzkreig-frontend && npm ci
+cd blitzkrieg-backend && npm ci
+cd ../blitzkrieg-frontend && npm ci
 ```
 
 ### 2) Build frontend
 
 ```bash
-cd blitzkreig-frontend
+cd blitzkrieg-frontend
 npm run build
 ```
 
 ### 3) Run backend in production mode
 
 ```bash
-cd blitzkreig-backend
+cd blitzkrieg-backend
 NODE_ENV=production npm start
 ```
 
 ### 4) Serve frontend
 
-Serve `blitzkreig-frontend/dist` with Nginx, Apache, or any static hosting service.
+Serve `blitzkrieg-frontend/dist` with Nginx, Apache, or any static hosting service.
 
 ## Deployment Notes
 
 - Store environment secrets on the server, never in git.
 - Keep `JWT_SECRET` strong and unique.
 - Set `CORS_ORIGIN` to your real frontend domain.
-- Ensure `blitzkreig-backend/public/uploads` is writable.
+- Ensure `blitzkrieg-backend/public/uploads` is writable.
 - Back up JSON data files regularly:
-  - `blitzkreig-backend/data/events.json`
-  - `blitzkreig-backend/data/committee.json`
-  - `blitzkreig-backend/data/users.json`
-  - `blitzkreig-backend/data/contactMessages.json`
+  - `blitzkrieg-backend/data/events.json`
+  - `blitzkrieg-backend/data/committee.json`
+  - `blitzkrieg-backend/data/users.json`
+  - `blitzkrieg-backend/data/contactMessages.json`
 
 ## Useful Commands
 
