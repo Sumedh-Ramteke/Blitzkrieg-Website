@@ -6,7 +6,8 @@ const { readJson, writeJson } = require('./utils/contentStore')
 async function seedAdmin() {
   try {
     const USERS_FILE = 'users.json'
-    const users = await readJson(USERS_FILE, [])
+    let users = await readJson(USERS_FILE, [])
+    let changed = false
 
     if (users.length === 0) {
       console.log('🌱 Seeding default admin user...')
@@ -15,13 +16,26 @@ async function seedAdmin() {
         id: 1,
         username: 'admin',
         password_hash,
-        role: 'admin',
+        role: 'ADMIN',
         created_at: new Date().toISOString()
       }
-      await writeJson(USERS_FILE, [adminUser])
+      users = [adminUser]
+      changed = true
       console.log('✅ Default admin user created: admin / Blitzkrieg@123')
     } else {
-      console.log('ℹ️ Users already exist, skipping seed.')
+      // Fix existing users with lowercase 'admin' role
+      users = users.map(u => {
+        if (u.role === 'admin') {
+          u.role = 'ADMIN'
+          changed = true
+        }
+        return u
+      })
+      if (changed) console.log('🔧 Fixed existing admin roles to uppercase.')
+    }
+
+    if (changed) {
+      await writeJson(USERS_FILE, users)
     }
   } catch (err) {
     console.error('❌ Error seeding admin:', err)
