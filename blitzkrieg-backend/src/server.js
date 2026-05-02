@@ -15,6 +15,7 @@ const eventRoutes     = require('./routes/events')
 const committeeRoutes = require('./routes/committee')
 const uploadRoutes    = require('./routes/upload')
 const contactRoutes   = require('./routes/contact')
+const seedAdmin       = require('./seed')
 
 // ─── App Setup ────────────────────────────────────────────────────────
 const app  = express()
@@ -79,9 +80,12 @@ app.use((err, _req, res, _next) => {
 })
 
 // ─── Start ────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`\n🚀  Blitzkrieg API listening on http://localhost:${PORT}`)
   console.log(`📋  Health: http://localhost:${PORT}/api/health\n`)
+  
+  // Seed the admin user if it doesn't exist
+  await seedAdmin()
 })
 
 module.exports = app
